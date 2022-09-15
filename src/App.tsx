@@ -1,7 +1,4 @@
-import Header from './components/Header/Header';
-import Sidenav from './components/Sidenav/Sidenav';
-import Footer from './components/Footer/Footer';
-import SiteBody from './components/SiteBody/SiteBody';
+import Section from './components/Section/Section';
 import { useEffect } from 'react';
 import './App.scss';
 import './grid.scss';
@@ -15,11 +12,11 @@ function App() {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
       </head>
-      <div className='header'><Header/></div>
-      <div className='body'><SiteBody/></div>
-      <div className='leftsidenav'><Sidenav/></div>
-      <div className='rightsidenav'><Sidenav/></div>
-      <div className='footer'><Footer/></div>
+      <div className='header'><Section name='Header'/></div>
+      <div className='body'><Section name='Body'/></div>
+      <div className='leftsidenav'><Section name='Sidenav 1'/></div>
+      <div className='rightsidenav'><Section name='Sidenav 2'/></div>
+      <div className='footer'><Section name='footer'/></div>
     </div>
   );
 }

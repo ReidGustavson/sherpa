@@ -1,7 +1,0 @@
-@import '../../mixins.scss';
-
-.SiteBody {
-  @include theme(violet);
-  height: 2000px;
-  overflow-y: auto;
-}
