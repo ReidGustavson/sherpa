@@ -1,12 +1,22 @@
 import Section from './components/Section/Section';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.scss';
 import './grid.scss';
 
 function App() {
+  const [showSidenav, setShowSidenav] = useState(false);
   useEffect(() => {
     document.title = 'Sherpa';
   });
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowSidenav(!showSidenav);
+    }, 2000);
+  
+    return () => clearInterval(interval);
+  });
+  
+
   return (
     <div className="App">
       <head>
@@ -14,8 +24,8 @@ function App() {
       </head>
       <div className='header'><Section name='Header'/></div>
       <div className='body'><Section name='Body'/></div>
-      <div className='leftsidenav'><Section name='Sidenav 1'/></div>
-      <div className='rightsidenav'><Section name='Sidenav 2'/></div>
+      {showSidenav && <div className='leftsidenav'><Section name='Sidenav 1'/></div>}
+      {showSidenav && <div className='rightsidenav'><Section name='Sidenav 2'/></div>} 
       <div className='footer'><Section name='footer'/></div>
     </div>
   );

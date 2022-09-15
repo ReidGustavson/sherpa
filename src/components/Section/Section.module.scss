@@ -2,5 +2,6 @@
 
 .Section {
   @include theme(blue);
+  overflow: auto;
 }
 
