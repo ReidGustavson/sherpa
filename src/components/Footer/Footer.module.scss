@@ -1,0 +1,6 @@
+@import '../../mixins.scss';
+
+.Footer {
+  z-index: 2;
+  @include theme(green);
+}

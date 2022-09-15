@@ -1,0 +1,6 @@
+@import '../../mixins.scss';
+
+.Header {
+  @include theme(blue);
+  z-index: 1;
+}

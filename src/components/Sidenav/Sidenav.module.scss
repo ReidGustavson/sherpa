@@ -1,0 +1,6 @@
+@import '../../mixins.scss';
+
+.Sidenav {
+  z-index: 2;
+  @include theme(black);
+}
