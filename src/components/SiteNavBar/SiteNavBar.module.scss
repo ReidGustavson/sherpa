@@ -1,1 +1,22 @@
-.SiteNavBar {}
+.SiteNavBar {
+  height: 50px;
+  border-bottom: 3px;
+  border-color: aqua;
+  display: flex;
+  flex-direction: inherit;
+  justify-items: inherit;
+
+  > * {
+    display: flex;
+    flex-direction: inherit;
+    justify-items: inherit;
+    text-align: center;
+  }
+
+  > ul {
+    list-style: none;
+    > li {
+      margin: 10px;
+    }
+  }
+}

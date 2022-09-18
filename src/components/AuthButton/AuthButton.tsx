@@ -5,17 +5,19 @@ import styles from './AuthButton.module.scss';
 
 const AuthButton: FC = () => {
   const navigate = useNavigate();
-  const auth = useAuth();
+  const {user, signin, signout} = useAuth();
 
   return (
-    <button onClick={() => {
-      if (auth.user) {
-        auth.signout(() => navigate("/", {replace: true}));
+    <button className={styles.AuthButton} onClick={() => {
+      if (user !== "") {
+        signout(() => {
+          navigate("/", {replace: true})
+        });
       } else {
-        navigate("/signin", {replace: true});
+        navigate("/signin", {replace: false});
       }
     }} >
-      Sign {auth.user ? 'out' : 'in'}
+      Sign {user === "" ? 'in' : 'out'}
     </button>
   )
 }

@@ -11,10 +11,8 @@ const SignIn = () => {
 
   const { from } = location.state || { from: { pathname: "/" } };
   const login = () => {
-    console.log('In login...');
     auth.signin(() => {
-      console.log('signing in...');
-      navigate(from, {replace: true});
+      navigate(from, {replace: false});
     });
   };
 

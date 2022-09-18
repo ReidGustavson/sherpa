@@ -1,8 +1,9 @@
 import { FC, useEffect } from 'react'; 
 import './App.scss';
 import AllRoutes from './components/AllRoutes/AllRoutes';
+import { ProvideAuth } from './components/Auth/Auth';
 import SiteNavBar from './components/SiteNavBar/SiteNavBar';
-import {Helmet} from 'react-helmet';
+import Header from './pages/Section/Header/Header';
 
 const myDiv  = (word: string) => {
   return (
@@ -16,11 +17,9 @@ const App: FC = () => {
   });
 
   return(
-    <>
-      
+    <ProvideAuth>
       <div className="App">
-        <div className='header'>{myDiv('Header')}</div>
-        {/* <div className='header'>{<SiteNavBar/>}</div> */}
+        <div className='header'>{<Header logoSource='logo192.png'/>}</div> 
         <div className='content'>
           {true && <div className='leftsidenav'>{myDiv('sideOne')}</div>}
           <div className='body'><AllRoutes/></div>
@@ -28,7 +27,7 @@ const App: FC = () => {
         </div>
         <div className='footer'>{myDiv('footer')}</div>
       </div>
-    </>
+    </ProvideAuth>
   )
 };
 
