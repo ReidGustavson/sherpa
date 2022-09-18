@@ -26,6 +26,7 @@ export function useProvideAuth() {
   const [user, setUser] = useState("");
 
   const signin = (cb: () => void) => {
+    console.log('In Auth');
     setUser("user");
     cb();
   };

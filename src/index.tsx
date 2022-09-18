@@ -4,20 +4,24 @@ import './index.scss';
 import App from './App';
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+import { Helmet } from 'react-helmet';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-root.render(
-  <React.StrictMode>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-    </head>
-    <BrowserRouter>
-      <App/>
-    </BrowserRouter>
-  </React.StrictMode>
+root.render(  
+  <>
+    <Helmet>
+      <title>My Title</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </Helmet>
+    <React.StrictMode>
+      <BrowserRouter>
+        <App/>
+      </BrowserRouter>
+    </React.StrictMode>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function
