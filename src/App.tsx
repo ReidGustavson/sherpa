@@ -1,34 +1,32 @@
-import Section from './components/Section/Section';
-import { useEffect, useState } from 'react';
+import { FC, useEffect } from 'react'; 
 import './App.scss';
-import './grid.scss';
+import AllRoutes from './components/AllRoutes/AllRoutes';
+import SiteNavBar from './components/SiteNavBar/SiteNavBar';
 
-function App() {
-  const [showSidenav, setShowSidenav] = useState(false);
+const myDiv  = (word: string) => {
+  return (
+    <div> {word} </div>
+  )
+}
+
+const App: FC = () => {
   useEffect(() => {
     document.title = 'Sherpa';
   });
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowSidenav(!showSidenav);
-    }, 2000);
-  
-    return () => clearInterval(interval);
-  });
-  
 
-  return (
+  return(
     <div className="App">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-      </head>
-      <div className='header'><Section name='Header'/></div>
-      <div className='body'><Section name='Body'/></div>
-      {showSidenav && <div className='leftsidenav'><Section name='Sidenav 1'/></div>}
-      {showSidenav && <div className='rightsidenav'><Section name='Sidenav 2'/></div>} 
-      <div className='footer'><Section name='footer'/></div>
+      <div className='header'>{myDiv('sideOne')}</div>
+      {/* <div className='header'>{<SiteNavBar/>}</div> */}
+      <div className='content'>
+        {true && <div className='leftsidenav'>{myDiv('sideOne')}</div>}
+        {/* <div className='body'>{myDiv('sideOne')}</div> */}
+        <div className='body'><AllRoutes/></div>
+        {true && <div className='rightsidenav'>{myDiv('sideTwo')}</div>} 
+      </div>
+      <div className='footer'>{myDiv('footer')}</div>
     </div>
-  );
-}
+  )
+};
 
 export default App;

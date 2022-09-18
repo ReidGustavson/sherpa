@@ -4,7 +4,7 @@ const LazyLogo = lazy(() => import('./Logo'));
 
 const Logo = (props: JSX.IntrinsicAttributes & { children?: React.ReactNode; }) => (
   <Suspense fallback={null}>
-    <LazyLogo {...props} />
+    <LazyLogo imgSource={''} {...props} />
   </Suspense>
 );
 

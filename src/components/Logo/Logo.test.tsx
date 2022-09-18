@@ -4,7 +4,7 @@ import Logo from './Logo';
 
 describe('<Logo />', () => {
   test('it should mount', () => {
-    render(<Logo />);
+    render(<Logo imgSource={''} />);
     
     const logo = screen.getByTestId('Logo');
 

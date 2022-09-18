@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import styles from './Logo.module.scss';
 
-interface LogoProps {}
+interface LogoProps {
+  imgSource: string;
+}
 
-const Logo: FC<LogoProps> = () => (
+const Logo: FC<LogoProps> = (props) => (
   <div className={styles.Logo} data-testid="Logo">
-    Logo Component
+    <img src={props.imgSource} alt="Logo"/>
   </div>
 );
 
