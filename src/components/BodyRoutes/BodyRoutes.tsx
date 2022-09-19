@@ -10,7 +10,7 @@ const BodyRoutes: FC = () => (
   <Routes>
     <Route path="/" element={<HomePage/>}/>
     <Route path="/signin" element={<SignInPage/>}/>
-    <Route path="/private" element={<PrivateOutlet/>}>
+    <Route element={<PrivateOutlet/>}>
       <Route path="/private" element={<PrivatePage/>}/>
     </Route>
     <Route path="/*" element={<PageNotFound/>}/>

@@ -1,24 +1,19 @@
-import {
-  useNavigate,
-  useLocation
-} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../components/Auth/Auth";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
-
-  const { from } = location.state || { from: { pathname: "/" } };
   const login = () => {
     auth.signin(() => {
-      navigate(from, {replace: false});
+      navigate(location?.state?.from ?? '/');
     });
   };
 
   return (
     <div>
-      <p>You must log in to view the page at {from.pathname}</p>
+      <p>You must log in to view {location?.state?.from ? 'page ' + location.state.from : 'this page'}.</p>
       <button onClick={login}>Log in</button>
     </div>
   );
