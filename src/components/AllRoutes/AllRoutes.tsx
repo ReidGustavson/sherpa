@@ -1,13 +1,9 @@
 import { FC } from "react";
-import {
-  Route,
-  Routes
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "../../pages/HomePage";
 import PageNotFound from "../../pages/pageNotFound";
 import PrivatePage from "../../pages/PrivatePage";
 import SignInPage from "../../pages/SignInPage";
-import { ProvideAuth } from "../Auth/Auth";
 import PrivateOutlet from "../PrivateOutlet/PrivateOutlet";
 
 const AllRoutes: FC = () => (

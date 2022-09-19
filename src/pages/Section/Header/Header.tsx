@@ -13,8 +13,8 @@ const Header: FC<HeaderProps> = (props) => {
   return (
     <div className={styles.Header}>
       <Logo imgSource={props.logoSource}/>
-      <AuthButton />
       <SiteNavBar/>
+      <div className={styles.authButton}><AuthButton/></div>
     </div>
   );
 }

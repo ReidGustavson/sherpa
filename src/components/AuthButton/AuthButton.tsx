@@ -5,7 +5,7 @@ import styles from './AuthButton.module.scss';
 
 const AuthButton: FC = () => {
   const navigate = useNavigate();
-  const {user, signin, signout} = useAuth();
+  const {user, signout} = useAuth();
 
   return (
     <button className={styles.AuthButton} onClick={() => {

@@ -31,7 +31,6 @@ export function useProvideAuth() {
   };
 
   const signout = (cb: () => void) => {
-    console.log('In Auth');
     setUser("");
     cb();
   };
