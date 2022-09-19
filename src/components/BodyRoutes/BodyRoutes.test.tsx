@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import AllRoutes from './AllRoutes';
+import BodyRoutes from './BodyRoutes';
 
-describe('<AllRoutes />', () => {
+describe('<BodyRoutes />', () => {
   test('it should mount', () => {
-    render(<AllRoutes />);
+    render(<BodyRoutes />);
     
     const routes = screen.getByTestId('Routes');
 

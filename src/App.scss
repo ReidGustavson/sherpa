@@ -4,7 +4,10 @@
   text-align: center;
   align-content: space-between;
   min-height: 100vh;
-  div[class*='sidenav'] { display: none; }
+  div[class*='sidenav'] { 
+    display: none; 
+    background-color: pink;
+  }
 
   .footer, .header {
     width: 100%;

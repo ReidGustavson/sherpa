@@ -6,7 +6,7 @@ import PrivatePage from "../../pages/PrivatePage";
 import SignInPage from "../../pages/SignInPage";
 import PrivateOutlet from "../PrivateOutlet/PrivateOutlet";
 
-const AllRoutes: FC = () => (
+const BodyRoutes: FC = () => (
   <Routes>
     <Route path="/" element={<HomePage/>}/>
     <Route path="/signin" element={<SignInPage/>}/>
@@ -17,4 +17,4 @@ const AllRoutes: FC = () => (
   </Routes>
 );
 
-export default AllRoutes;
+export default BodyRoutes;

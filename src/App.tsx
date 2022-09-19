@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react'; 
 import './App.scss';
-import AllRoutes from './components/AllRoutes/AllRoutes';
+import BodyRoutes from './components/BodyRoutes/BodyRoutes';
+import RSNRoutes from './components/RSNRoutes/RSNRoutes';
 import { ProvideAuth } from './components/Auth/Auth';
-import SiteNavBar from './components/SiteNavBar/SiteNavBar';
 import Header from './pages/Section/Header/Header';
 
 const myDiv  = (word: string) => {
@@ -22,8 +22,8 @@ const App: FC = () => {
         <div className='header'>{<Header logoSource='logo192.png'/>}</div> 
         <div className='content'>
           {true && <div className='leftsidenav'>{myDiv('sideOne')}</div>}
-          <div className='body'><AllRoutes/></div>
-          {true && <div className='rightsidenav'>{myDiv('sideTwo')}</div>} 
+          <div className='body'><BodyRoutes/></div>
+          {true && <div className='rightsidenav'><RSNRoutes/></div>} 
         </div>
         <div className='footer'>{myDiv('footer')}</div>
       </div>
