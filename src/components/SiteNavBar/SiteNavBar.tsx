@@ -7,10 +7,13 @@ const SiteNavBar: FC = () => {
     <div className={styles.SiteNavBar} data-testid="SiteNavBar">
       <ul>
         <li>
-          <Link to="/">Public Page</Link>
+          <Link to="/">Public</Link>
         </li>
         <li>
-          <Link to="/private">Protected Page</Link>
+          <Link to="/private">Private</Link>
+        </li>
+        <li>
+          <Link to="/sudoku">Sudoku</Link>
         </li>
       </ul>
     </div>
