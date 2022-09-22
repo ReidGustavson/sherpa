@@ -3,7 +3,7 @@
   flex-direction: column;
   text-align: center;
   align-content: space-between;
-  min-height: 100vh;
+  height: 100vh;
   div[class*='sidenav'] { 
     display: none; 
     background-color: pink;
@@ -14,12 +14,12 @@
   }
 
   > .content {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: row;
-    flex: 1;
     justify-content: space-between;
-    min-width: 100vw;
     > div {
+      flex: 1 1 auto;
       overflow: auto;
     }
   }
