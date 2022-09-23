@@ -9,10 +9,16 @@ export class CubeDetails {
   given: boolean
   color: Color | null
   onClick: () => void
-  constructor(color: Color | null = null, given = false, onClick: (() => void) | null = null) {
+  index: number
+  constructor(index: number, color: Color | null = null, given = false, onClick: (() => void) | null = null) {
     this.onClick = onClick ?? (() => {return});
     this.color = color
     this.given = given
+    this.index = index
+  }
+
+  static clone(cubeDetails: CubeDetails) {
+    return new CubeDetails(cubeDetails.index, cubeDetails.color, cubeDetails.given, cubeDetails.onClick)
   }
 }
 
@@ -22,28 +28,36 @@ interface SudokuGameProps {
 
 const SudokuGame: FC<SudokuGameProps> = ({gameSize}) => {
   const [solved, setSolved] = useState(false);
-  const [colorIndexes, setColorIndexes] = useState([0,1,2,3,2,0,2,1,0,1,2,0,3,1,0,0,1,2,3,1,0,0,1,2,1,2,0]);
+  const [colorIndexes, setColorIndexes] = useState([3,1,2,1,2,0,2,0,1,1,2,0,2,0,1,0,1,2,2,0,1,0,1,2,1,2,0]);
   function clickBox(index: number) {
     if (solved) {
+      console.log('SOLVED!')
       return
     }
-    if (colorIndexes[index] === gameSize && voidIndexes.delete(index)) {
-      setVoidIndexes(new Set(voidIndexes));
+    if (colorIndexes[index] === gameSize && nullIndexes.delete(index)) {
+      setNullIndexes(nullIndexes)
     }
     colorIndexes[index] = ++colorIndexes[index]%(gameSize + 1)
     setColorIndexes(colorIndexes)
+    cubeDetails[index].color = colors[colorIndexes[index]%(gameSize + 1)]
+    setCubeDetails(cubeDetails)
+    console.log('STATE UPDATED.... INDEX: ', index, " colorIndex: ", colorIndexes[index])
     if (colorIndexes[index] === gameSize) {
-      setVoidIndexes(new Set(voidIndexes.add(index)))
+      nullIndexes.add(index)
+      setNullIndexes(nullIndexes)
     }
-    if (voidIndexes.size === 0) {
+    if (nullIndexes.size === 0) {
+      console.log('check For Win...')
       if (checkForWin()) {
+        console.log('WIN!')
         setSolved(true)
+        console.log(solved);
       }
     }
   }
-
+  
   function checkForWin(): boolean {
-    for (let i=0; i < gameSize * gameSize; i++) {
+    for (let i=0; i < gameSize; i++) {
       for (let j=0; j < gameSize; j++) {
         const row = new Set();
         const column = new Set();
@@ -54,7 +68,7 @@ const SudokuGame: FC<SudokuGameProps> = ({gameSize}) => {
           depth.add(colorIndexes[i*gameSize + j + k*gameSize*gameSize])
         }
         for (const dimension of [row, column, depth]) {
-          if (dimension.has(gameSize) || dimension.entries.length < gameSize) {
+          if (dimension.has(gameSize) || dimension.size < gameSize) {
             return false
           }
         }
@@ -63,16 +77,17 @@ const SudokuGame: FC<SudokuGameProps> = ({gameSize}) => {
     return true;
   }
 
-  const colors = [new Color('blue'), new Color('green'), new Color('yellow'), null]
-  const currentVoidIndexes = new Set();
-  const cubeDetails = colorIndexes.map((value, index) => {
-    if (!value) {
-      currentVoidIndexes.add(index);
-      return new CubeDetails();
+  const colors = [new Color('red'), new Color('blue'), new Color('green'), null]
+  const currentNullIndexes = new Set();
+  const currentCubeDetails = colorIndexes.map((value, index) => {
+    if (value === gameSize) {
+      currentNullIndexes.add(index);
+      return new CubeDetails(index, null, false, () => clickBox(index));
     }
-    return new CubeDetails(colors[colorIndexes[value]], true, () => clickBox(index))
+    return new CubeDetails(index, colors[value], true)
   })
-  const [voidIndexes, setVoidIndexes] = useState(currentVoidIndexes);
+  const [nullIndexes, setNullIndexes] = useState(currentNullIndexes);
+  const [cubeDetails, setCubeDetails] = useState(currentCubeDetails);
   return (
     <SudokuGameContext.Provider value={{solved: solved}}>
         <CubeCube detailsForCubes={cubeDetails} gameSize={gameSize}/>

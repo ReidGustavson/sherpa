@@ -3,15 +3,15 @@ import { Canvas }  from '@react-three/fiber';
 import { OrbitControls, Stars } from "@react-three/drei";
 import styles from './Sudoku.module.scss';
 import SudokuGame from './SudokuGame/SudokuGame.lazy';
+import { Color } from 'three';
 
 const Sudoku: FC = () => {
   return (
     <div className={styles.Sudoku}>
-      <Canvas color='0xff00ff'>
+      <Canvas camera={{position: [10,10,10], fov: 90}}>
         <OrbitControls/>
         <Stars />
-        <ambientLight color='0xffffff' intensity={.5}/>
-        <spotLight position={[10,15,10]} angle={.8}/>
+        <ambientLight color={new Color('white')} intensity={1}/>
         <SudokuGame gameSize={3}/>
       </Canvas>
     </div>

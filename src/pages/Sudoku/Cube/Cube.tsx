@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import * as THREE from 'three';
 import { Vector3 } from 'three';
 import { CubeDetails } from '../SudokuGame/SudokuGame';
@@ -9,21 +9,38 @@ interface CubeProps {
 }
 
 const Cube: FC<CubeProps> = ({cubeDetails, position, ...props}) => {
-  const msh = useRef<THREE.Mesh>(null)
-  const [hovered, setHover] = useState(false)
+  console.log('SCARED');
+  //const {solved} = useContext(SudokuGameContext);
+  //if (solved) {
+    // useFrame(() => {
+    //   if (msh.current?.rotation) {
+    //     msh.current.rotation.x += 0.01
+    // }})
+  //}
+  const [opacity, setOpacity] = useState(!cubeDetails.color ? 0 : (cubeDetails.given ? 1 : .8))
+
+  function handleClick() {
+    cubeDetails.onClick()
+    if (!cubeDetails.given) {
+      setOpacity(!cubeDetails.color ? 0 : .8)
+    }
+  }
+  
+  function handleHover(over: boolean) {
+    if (cubeDetails.color && !cubeDetails.given) {
+      setOpacity(over ? .8 : .4)
+    }
+  }
 
   return (
     <mesh
       {...props}
       position={position}
-      ref={msh}
-      onClick={(_) => cubeDetails.onClick()}
-      onPointerOver={(_) => setHover(true)}
-      onPointerOut={(_) => setHover(false)}>
+      onClick={(_) => handleClick()}
+      onPointerOver={(_) => handleHover(true)}
+      onPointerOut={(_) => handleHover(false)}>
       <boxGeometry scale={(x: 10, y:10, z:10) => new THREE.BoxGeometry(x,z,y)} />
-      <meshStandardMaterial 
-        opacity={(!cubeDetails.color ? 0 : (cubeDetails.given ? 1 : (hovered ? .4 : .8)))} 
-        color={cubeDetails.color ?? undefined}/>
+      <meshStandardMaterial transparent opacity={opacity} color={cubeDetails.color ?? 'white'}/>
     </mesh>
   )
 };

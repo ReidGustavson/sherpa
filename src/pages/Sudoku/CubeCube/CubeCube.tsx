@@ -29,7 +29,7 @@ const CubeCube: FC<CubeCubeProps> = ({detailsForCubes, gameSize}) => {
     <>
       {
         detailsForCubes.map((cubeDetails, index) => 
-          <Cube key={index} cubeDetails={cubeDetails} position={getPosition(index)}/>
+          <Cube key={String(index) + cubeDetails.color} cubeDetails={cubeDetails} position={getPosition(index)}/>
         )
       }
     </>
