@@ -4,7 +4,7 @@ import SudokuGame from './SudokuGame';
 
 describe('<SudokuGame />', () => {
   test('it should mount', () => {
-    render(<SudokuGame gameSize={2} />);
+    // render(<SudokuGame gameSize={2} />);
     
     const sudokuGame = screen.getByTestId('SudokuGame');
 
