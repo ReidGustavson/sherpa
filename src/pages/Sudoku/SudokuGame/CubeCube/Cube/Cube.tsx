@@ -37,14 +37,11 @@ const Cube: FC<CubeProps> = (props) => {
 
   return (
     <>
-      {/* <mesh
-        position={position}
-        >
+      {/* <mesh position={defProps.position}>
         <boxGeometry parameters={{width: 10, height: 10, depth: 10, widthSegments: 1, heightSegments: 1, depthSegments: 1}} />
-        <meshStandardMaterial color={solved ? 'gold' : 'purple'}/>
+        <meshStandardMaterial color={defProps.solved ? 'gold' : 'purple'}/>
       </mesh> */}
       <mesh
-        {...defProps}
         position={defProps.position}
         onClick={(_) => {if (!defProps.solved) defProps.clickCube(defProps.index ?? 0)}}
         // onPointerOver={(_) => handleHover(true)}

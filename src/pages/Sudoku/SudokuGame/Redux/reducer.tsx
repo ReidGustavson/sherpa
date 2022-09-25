@@ -2,6 +2,7 @@ import { ActionTypes} from "./actions";
 import { Action } from 'redux';
 import { SudokuGameState } from "./store";
 import type { Reducer } from '@reduxjs/toolkit'
+import { checkForSolve } from "../CubeMath";
 
 interface ActionPayload extends Action<ActionTypes> {
   payload?: unknown
@@ -38,26 +39,7 @@ function checkForWin(state: SudokuGameState): SudokuGameState {
     return state
   }
 
-  const gameSize = Math.cbrt(state.cubeDetails.length)
-  for (let i=0; i < gameSize; i++) {
-    for (let j=0; j < gameSize; j++) {
-      const row = new Set()
-      const column = new Set()
-      const depth = new Set()
-      for (let k=0; k < gameSize; k++) {
-        row.add(state.cubeDetails[i*gameSize*gameSize + j*gameSize + k].colorIndex)
-        column.add(state.cubeDetails[i*gameSize*gameSize + j + k*gameSize].colorIndex)
-        depth.add(state.cubeDetails[i*gameSize + j + k*gameSize*gameSize].colorIndex)
-      }
-      for (const dimension of [row, column, depth]) {
-        if (dimension.has(gameSize) || dimension.size < gameSize) {
-          state.solved = false
-          return state
-        }
-      }
-    }
-  }
-  state.solved = true
+  state.solved = checkForSolve(state.cubeDetails.map(x => x.colorIndex))
   return state
 }
 

@@ -4,7 +4,7 @@ import { Color, Vector3 } from 'three';
 import Cube from './Cube/Cube';
 
 interface CubeCubeProps {
-  colors: (Color|null)[]
+  colors: (Color | null)[]
   cubeIndexes: number[]
   position: Vector3
 }
