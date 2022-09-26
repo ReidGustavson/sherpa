@@ -1,4 +1,4 @@
-import { getCubeIndexes, checkForSolve } from './CubeMath';
+import { getCubeIndexes, checkForSolve, newRandomGame, getIndexesInLineWithIndex } from './CubeMath';
 
 describe('Cube Math', () => {
   describe('GetCubeIndexes ', () => {
@@ -40,5 +40,25 @@ describe('Cube Math', () => {
     test('Size 3 unsolved wrong', () => {
       expect(checkForSolve([0,2,1,1,2,0,2,0,1,1,2,0,2,0,1,0,1,2,2,0,1,0,1,2,1,2,0])).toBeFalsy()
     });
+  })
+
+  describe('newRandomGame', () => {
+    test('Size 2', () => {
+      const game = newRandomGame(2);
+      if (game[0]) {
+        for(let i=0; i<game?.length; i++) {
+          game[i] = game[i] ? 0 : 1
+        }
+      }
+      console.log(game)
+      expect(game).toStrictEqual([0,1,1,0,1,0,0,1])
+    })
+  })
+
+  describe('getIndexesInlineWithIndex', () => {
+    test('Size 3', () => {
+      const indexes = getIndexesInLineWithIndex(14,3);
+      expect(new Set(indexes)).toStrictEqual(new Set([5,11,12,13,14,17,23]))
+    })
   })
 });
