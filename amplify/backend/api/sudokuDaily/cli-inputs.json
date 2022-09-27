@@ -1,8 +1,8 @@
 {
   "version": 1,
   "paths": {
-    "/sudoku/daily/{day}/{dim}": {
-      "name": "/sudoku/daily/{day}/{dim}",
+    "/sudoku/daily/{dim}": {
+      "name": "/sudoku/daily/{dim}",
       "lambdaFunction": "dailySudoku",
       "permissions": {
         "setting": "open"

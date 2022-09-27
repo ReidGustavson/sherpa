@@ -27,6 +27,12 @@
           "partitionKeyName": "yyyymmdd_dim",
           "partitionKeyType": "S"
         }
+      },
+      "function": {
+        "dailySudoku": {
+          "deploymentBucketName": "amplify-sherpa-dev-191623-deployment",
+          "s3Key": "amplify-builds/dailySudoku-66394255764434654447-build.zip"
+        }
       }
     }
   }

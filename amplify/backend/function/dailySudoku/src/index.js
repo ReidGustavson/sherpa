@@ -1,5 +1,5 @@
-import { createServer, proxy } from 'aws-serverless-express';
-import app from './app';
+const { createServer, proxy } = require('aws-serverless-express')
+const app = require('./app')
 
 /**
  * @type {import('http').Server}

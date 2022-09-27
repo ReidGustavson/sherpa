@@ -1,7 +1,7 @@
-import { process, config, DynamoDB } from 'aws-sdk';
-import { eventContext } from 'aws-serverless-express/middleware';
-import { json } from 'body-parser';
-import express from 'express';
+const {config, DynamoDB } = require('aws-sdk')
+const {eventContext } = require('aws-serverless-express/middleware')
+const { json } = require('body-parser')
+const express = require('express')
 
 config.update({ region: process.env.TABLE_REGION });
 
@@ -42,12 +42,12 @@ app.get(path, function(req, res) {
   if (isNaN(dim) || dim < 2 || dim > 5) {
     res.statusCode = 400
     res.json({error: 'Invalid input, currently only dimensions 2-5 are supported.'})
-    return
+    return res
   }
   if (dim === 2) {
     res.statusCode = 200
     res.json({values: [0,1,1,0,1,0,0,1]})
-    return
+    return res
   }
   const today = new Date().toISOString().slice(0, 10).replace("-","")
   const dailyPartitionKey = today+"_"+dim
@@ -55,13 +55,13 @@ app.get(path, function(req, res) {
   if (dailyAnswer) {
     res.statusCode = 200
     res.json(dailyAnswer.values)
-    return
+    return res
   }
   const newAnswer = getNewAnswer(dim)
   if (!newAnswer) {
     res.statusCode = 500
     res.json({error: 'Could not load new answer. Sorry, please try again later.'})
-    return
+    return res
   }
   removeCubes(newAnswer)
   if (uploadAnswer(newAnswer, dailyPartitionKey)) {
@@ -71,6 +71,7 @@ app.get(path, function(req, res) {
     res.statusCode = 500
     res.json({error: 'Could not load new answer into answer table.'})
   }
+  return res
 });
 
 function getDailyPuzzle(partitionKey) {
