@@ -5,17 +5,15 @@ import styles from './Sudoku.module.scss';
 import SudokuGame from './SudokuGame/SudokuGame.lazy';
 import * as THREE from 'three';
 import { Color } from 'three';
-import { newRandomGame } from './SudokuGame/CubeMath';
 
 const Sudoku: FC = () => {
-  const gameSize = 3
-  const colors = [new Color('red'), new Color('blue'), new Color('green'),new Color('purple'),new Color('yellow')]
-  const [game] = useState([3,3,3,1,2,0,2,0,1,3,3,3,3,3,3,3,1,2,2,0,1,0,1,2,1,2,0])
+  console.log('Rerender Suoku')
+  const [gameSize] = useState(3)
+  
   useEffect(() => {
     document.title = `Sudoku`;
   });
 
-  
   const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 10000 )
   camera.position.x = 10
   camera.position.y = 10
@@ -61,11 +59,8 @@ const Sudoku: FC = () => {
       <Canvas camera={camera}>
         <OrbitControls/>
         <Stars />
-        <ambientLight color={new Color('white')} intensity={1}/>
-        <SudokuGame 
-          gameSize={gameSize} 
-          colorIndexes={game}
-          colors={[...colors.slice(0, gameSize), null]}/>
+        <ambientLight color={new Color('white')} intensity={1}/> 
+        <SudokuGame gameSize={gameSize}/>
       </Canvas>
     </div>
   );

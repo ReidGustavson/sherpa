@@ -1,10 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.scss';
-import App from './App';
-import { BrowserRouter } from "react-router-dom";
-import reportWebVitals from './reportWebVitals';
-import { Helmet } from 'react-helmet';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.scss'
+import App from './App'
+import { BrowserRouter } from "react-router-dom"
+import reportWebVitals from './reportWebVitals'
+import { Helmet } from 'react-helmet'
+import Amplify from 'aws-amplify'
+import awsExports from './aws-exports'
+Amplify.configure(awsExports)
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

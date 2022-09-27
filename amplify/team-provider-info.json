@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sherpa-dev-191623-authRole",
+      "UnauthRoleArn": "arn:aws:iam::824306857104:role/amplify-sherpa-dev-191623-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::824306857104:role/amplify-sherpa-dev-191623-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-sherpa-dev-191623-deployment",
+      "UnauthRoleName": "amplify-sherpa-dev-191623-unauthRole",
+      "StackName": "amplify-sherpa-dev-191623",
+      "StackId": "arn:aws:cloudformation:us-west-2:824306857104:stack/amplify-sherpa-dev-191623/3854e610-3d41-11ed-a7a9-02ca1de8b5c7",
+      "AmplifyAppId": "d2y4w2mpr43nyn"
+    },
+    "categories": {
+      "storage": {
+        "sudokuanswers": {
+          "tableName": "sudoku_answers",
+          "region": "us-west-2",
+          "arn": "arn:aws:dynamodb:us-west-2:824306857104:table/sudoku_answers",
+          "partitionKeyName": "dimension_index",
+          "partitionKeyType": "S"
+        },
+        "dailysudoku": {
+          "tableName": "daily_sudoku",
+          "region": "us-west-2",
+          "arn": "arn:aws:dynamodb:us-west-2:824306857104:table/daily_sudoku",
+          "partitionKeyName": "yyyymmdd_dim",
+          "partitionKeyType": "S"
+        }
+      }
+    }
+  }
+}

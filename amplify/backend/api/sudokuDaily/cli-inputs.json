@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/sudoku/daily/{day}/{dim}": {
+      "name": "/sudoku/daily/{day}/{dim}",
+      "lambdaFunction": "dailySudoku",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
