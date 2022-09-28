@@ -1,3 +1,7 @@
+/* Amplify Params - DO NOT EDIT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const {config, DynamoDB } = require('aws-sdk')
@@ -10,19 +14,14 @@ config.update({ region: process.env.TABLE_REGION });
 const dynamodb = new DynamoDB.DocumentClient();
 
 const dailySudoku = {
-  table: "dailysudoku",
+  table: "daily_sudoku",
   partitionKeyName: "yyyymmdd_dim",
   partitionKeyType: "S"
 }
 const sudokuAnswers = {
-  table: "sudokuanswers",
+  table: "sudoku_answers",
   partitionKeyName: "dimension_index",
   partitionKeyType: "S"
-}
-
-if (process.env.ENV && process.env.ENV !== "NONE") {
-  dailySudoku.table = dailySudoku.table + '-' + process.env.ENV;
-  sudokuAnswers.table = sudokuAnswers.table + '-' + process.env.ENV;
 }
 
 const path = "/sudoku/daily/:dim";
@@ -91,9 +90,10 @@ function getNewAnswer(dim, dailyPartitionKey, res) {
 
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      console.log('NO NO NO NO NO')
+      console.log('IN GET NEW ANSWER FAIL')
       res.statusCode = 500
       res.json({error: err})
+      //storeAnswer([1,0,1,1,0], dailyPartitionKey, res)    // remove this!
     } else {
       const newAnswer = decode(data.Item.values.map(val =>  parseInt(val['S'])), dim)
       console.log('NEW ANSWER: ', newAnswer)
@@ -104,22 +104,21 @@ function getNewAnswer(dim, dailyPartitionKey, res) {
 }
 
 function storeAnswer(answer, dailyPartitionKey, res) {
-  console.log('UPOLAD ANSWER')
   let item = {}  
-  item[dailySudoku.partitionKeyName] = {S: '3_3'}        //dailyPartitionKey} TODO: FIX THIS
+  item[dailySudoku.partitionKeyName] = {S: dailyPartitionKey}
   item['values'] = {L: answer.map(x => {return {S: x.toString()}})}
   let putItemParams = {
     TableName: dailySudoku.table,
     Item: item
   }
-  console.log('Pip: ', putItemParams)
+
   dynamodb.put(putItemParams,(err, _) => {
     if(err) {
-      console.log('IN UPLOAD: 3')
+      console.log('IN UPLOAD FAIL')
       res.statusCode = 500
-      res.json({error: 'Could not load new answer into answer table.'})
+      res.json({error: err})
     } else {
-      console.log('IN UPLOAD: 4')
+      console.log('IN UPLOAD SUCCESS')
       res.statusCode = 200
       res.json({values: answer})
     }

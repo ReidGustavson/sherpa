@@ -25,23 +25,15 @@
           "attributes": [
             "Name",
             "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
+          ]
         },
         {
           "category": "storage",
-          "resourceName": "sudokuanswers",
+          "resourceName": "sudokudaily",
           "attributes": [
             "Name",
             "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
+          ]
         }
       ]
     }
