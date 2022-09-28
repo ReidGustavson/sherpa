@@ -1,4 +1,4 @@
 {
   "httpMethod": "GET",
-  "path": "/sudoku/daily/1"
+  "path": "/"
 }

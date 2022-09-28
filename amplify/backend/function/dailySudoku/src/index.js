@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { createServer, proxy } = require('aws-serverless-express')
 const app = require('./app')
 
@@ -9,7 +11,9 @@ const server = createServer(app);
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-export function handler(event, context) {
+function handler(event, context) {
   console.log(`EVENT: ${JSON.stringify(event)}`);
   return proxy(server, event, context, 'PROMISE').promise;
 }
+
+module.exports = { handler }
