@@ -31,7 +31,7 @@
       "function": {
         "dailySudoku": {
           "deploymentBucketName": "amplify-sherpa-dev-191623-deployment",
-          "s3Key": "amplify-builds/dailySudoku-4e487547495051777637-build.zip"
+          "s3Key": "amplify-builds/dailySudoku-7978612f79384d4e3649-build.zip"
         }
       }
     }
