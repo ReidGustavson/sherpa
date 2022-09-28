@@ -32,7 +32,7 @@ app.use(json())
 app.use(eventContext())
 
 // Enable CORS for all methods
-app.use(function(req, res, next) {
+app.use(function(_, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "*")
   next()
@@ -51,51 +51,34 @@ app.get(path, function(req, res) {
     res.json({values: [0,1,1,0,1,0,0,1]})
     return
   }
-  const today = new Date().toISOString().slice(0, 10).replace("-","")
-  const dailyPartitionKey = today+"_"+dim
-  const dailyAnswer = getDailyPuzzle(dailyPartitionKey)
-  if (dailyAnswer) {
-    console.log('DAILY PUZZLE')
-    res.statusCode = 200
-    res.json(dailyAnswer.values)
-    return
-  }
-  console.log('NEW PUZZLE SEARCH')
-  const newAnswer = getNewAnswer(dim)
-  if (!newAnswer) {
-    res.statusCode = 500
-    res.json({error: 'Could not load new answer. Sorry, please try again later.'})
-    return
-  }
-  removeCubes(newAnswer)
-  console.log(newAnswer)
-  if (uploadAnswer(newAnswer, dailyPartitionKey)) {
-    res.statusCode = 200
-    res.json({values: newAnswer})
-  } else {
-    res.statusCode = 500
-    res.json({error: 'Could not load new answer into answer table.'})
-  }
+
+  getDailyPuzzle(dim, res)
 });
 
-function getDailyPuzzle(partitionKey) {
+function getDailyPuzzle(dim, res) {
   let params = {}  
-  params[dailySudoku.partitionKeyName] = partitionKey 
+  const today = new Date().toISOString().slice(0, 10).replace("-","")
+  const dailyPartitionKey = today+"_"+dim
+  params[dailySudoku.partitionKeyName] =  '3_3'  //   dailyPartitionKey TODO: FIX THIS
+
   let getItemParams = {
     TableName: dailySudoku.table,
     Key: params
   }
 
-  dynamodb.get(getItemParams,(err, data) => {
+  return dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      return null;
+      console.log('NO DAILY PUZZLE')
+      getNewAnswer(dim, dailyPartitionKey, res)
     } else {
-      return data.Item.values.map(x => parseInt(x)) ;
+      console.log('DAILY PUZZLE')
+      res.statusCode = 200
+      res.json({values: data.Item.values.map(x => parseInt(x["S"]))})
     }
   });
 }
 
-function getNewAnswer(dim) {
+function getNewAnswer(dim, dailyPartitionKey, res) {
   const params = {}
   const selectionSize = dim === 3 ? 4 : 400
   const answerKey = dim + '_' + Math.floor(Math.random() * selectionSize)
@@ -105,14 +88,40 @@ function getNewAnswer(dim) {
     TableName: sudokuAnswers.table,
     Key: params
   }
-  console.log('params: ', params)
 
-  dynamodb.scan(getItemParams,(err, data) => {
+  dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      return null
+      console.log('NO NO NO NO NO')
+      res.statusCode = 500
+      res.json({error: err})
     } else {
-      console.log('RETRIEVED: ', data)
-      return decode(data.Item.values, dim)
+      const newAnswer = decode(data.Item.values.map(val =>  parseInt(val['S'])), dim)
+      console.log('NEW ANSWER: ', newAnswer)
+      removeCubes(newAnswer, dim)
+      storeAnswer(newAnswer, dailyPartitionKey, res)
+    }
+  })
+}
+
+function storeAnswer(answer, dailyPartitionKey, res) {
+  console.log('UPOLAD ANSWER')
+  let item = {}  
+  item[dailySudoku.partitionKeyName] = {S: '3_3'}        //dailyPartitionKey} TODO: FIX THIS
+  item['values'] = {L: answer.map(x => {return {S: x.toString()}})}
+  let putItemParams = {
+    TableName: dailySudoku.table,
+    Item: item
+  }
+  console.log('Pip: ', putItemParams)
+  dynamodb.put(putItemParams,(err, _) => {
+    if(err) {
+      console.log('IN UPLOAD: 3')
+      res.statusCode = 500
+      res.json({error: 'Could not load new answer into answer table.'})
+    } else {
+      console.log('IN UPLOAD: 4')
+      res.statusCode = 200
+      res.json({values: answer})
     }
   });
 }
@@ -122,55 +131,35 @@ function decode(level, dim) {
   const numBits = dim === 5 ? 3 : 2;
   const soln = []
   const bitwiseComp = parseInt(Math.pow(2, numBits) - 1)
-  for (let stringEncodedNumber of level) {
-    const encodedNumber = parseInt(stringEncodedNumber)
+  for (let encodedNumber of level) {
     if (isNaN(encodedNumber)) {
       return null;
     }
     for (let i=0; i< valuesPerEncodedNumber; i++) {
-      let index = parseInt(encodedNumber >> ((valuesPerEncodedNumber - i - 1) * numBits)) & bitwiseComp
+      const bitsToShift = (valuesPerEncodedNumber - i - 1) * numBits
+      const shiftedVal = encodedNumber >> bitsToShift
+      const index = shiftedVal & bitwiseComp
       if (isNaN(index)) {
         return null;
       }
-      soln.append(index)
+      soln.push(index)
     }
   }
   return soln
 }
 
 function removeCubes(answer, dim) {
-  const numberToDelete = Math.floor(answer.length() *.6)
-  const indexes = Set.from(Array.from(answer.keys()))
+  const numberToDelete = Math.floor(answer.length *.6)
+  const indexes = new Set(Array.from(answer.keys()))
   for (let i=0; i< numberToDelete; i++) {
-      const index = Array.from(indexes).random()
-      indexes.remove(index)
-      answer[index] = dim
+    const index = Array.from(indexes)[Math.floor(Math.random() * indexes.size)]
+    indexes.delete(index)
+    answer[index] = dim
   }
-}
-
-function uploadAnswer(answer, partitionKey) {
-  let item = {}  
-  item[dailySudoku.partitionKeyName] = {S: partitionKey}
-  item['values'] = {L: answer.map(x => {return {S: x.toString()}})}
-  let putItemParams = {
-    TableName: dailySudoku.table,
-    Item: item
-  }
-
-  dynamodb.put(putItemParams,(err, _) => {
-    if(err) {
-      return null;
-    } else {
-      return answer;
-    }
-  });
 }
 
 app.listen(3000, function() {
   console.log("App started")
 });
 
-// Export the app object. When executing the application local this does nothing. However,
-// to port it to AWS Lambda we will create a wrapper around that will load the app from
-// this file
 module.exports = app
