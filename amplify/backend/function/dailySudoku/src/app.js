@@ -1,13 +1,12 @@
-/* Amplify Params - DO NOT EDIT
-	ENV
-	REGION
-Amplify Params - DO NOT EDIT */
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const {config, DynamoDB } = require('aws-sdk')
 const {eventContext } = require('aws-serverless-express/middleware')
 const { json } = require('body-parser')
 const express = require('express')
+// const { Logger } = require('aws-amplify')
+
+// const logger = new Logger('DailySudokuFunctionLogger')
 
 config.update({ region: process.env.TABLE_REGION });
 
@@ -58,19 +57,19 @@ function getDailyPuzzle(dim, res) {
   let params = {}  
   const today = new Date().toISOString().slice(0, 10).replace("-","")
   const dailyPartitionKey = today+"_"+dim
-  params[dailySudoku.partitionKeyName] =  '3_3'  //   dailyPartitionKey TODO: FIX THIS
+  params[dailySudoku.partitionKeyName] = dailyPartitionKey
 
   let getItemParams = {
     TableName: dailySudoku.table,
     Key: params
   }
-
+  // logger.info('GetDailyPuzzle: ', getItemParams)
   return dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      console.log('NO DAILY PUZZLE')
+      // logger.info('NO DAILY PUZZLE', err)
       getNewAnswer(dim, dailyPartitionKey, res)
     } else {
-      console.log('DAILY PUZZLE')
+      // logger.info('DAILY PUZZLE')
       res.statusCode = 200
       res.json({values: data.Item.values.map(x => parseInt(x["S"]))})
     }
@@ -90,13 +89,13 @@ function getNewAnswer(dim, dailyPartitionKey, res) {
 
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
-      console.log('IN GET NEW ANSWER FAIL')
+      // logger.info('IN GET NEW ANSWER FAIL', err)
       res.statusCode = 500
       res.json({error: err})
       //storeAnswer([1,0,1,1,0], dailyPartitionKey, res)    // remove this!
     } else {
       const newAnswer = decode(data.Item.values.map(val =>  parseInt(val['S'])), dim)
-      console.log('NEW ANSWER: ', newAnswer)
+      // logger.info('NEW ANSWER: ', newAnswer)
       removeCubes(newAnswer, dim)
       storeAnswer(newAnswer, dailyPartitionKey, res)
     }
@@ -114,11 +113,11 @@ function storeAnswer(answer, dailyPartitionKey, res) {
 
   dynamodb.put(putItemParams,(err, _) => {
     if(err) {
-      console.log('IN UPLOAD FAIL')
+      //logger.info('IN UPLOAD FAIL', err)
       res.statusCode = 500
       res.json({error: err})
     } else {
-      console.log('IN UPLOAD SUCCESS')
+      //logger.info('IN UPLOAD SUCCESS')
       res.statusCode = 200
       res.json({values: answer})
     }
@@ -158,7 +157,7 @@ function removeCubes(answer, dim) {
 }
 
 app.listen(3000, function() {
-  console.log("App started")
+  //logger.info("App started")
 });
 
 module.exports = app
