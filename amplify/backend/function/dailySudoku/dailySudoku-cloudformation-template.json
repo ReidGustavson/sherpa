@@ -23,6 +23,14 @@
     "storagedailysudokuArn": {
       "Type": "String",
       "Default": "storagedailysudokuArn"
+    },
+    "storagesudokuanswersName": {
+      "Type": "String",
+      "Default": "storagesudokuanswersName"
+    },
+    "storagesudokuanswersArn": {
+      "Type": "String",
+      "Default": "storagesudokuanswersArn"
     }
   },
   "Conditions": {
@@ -172,13 +180,9 @@
             {
               "Effect": "Allow",
               "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
                 "dynamodb:Query",
-                "dynamodb:Scan",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem"
+                "dynamodb:GetItem",
+                "dynamodb:PutItem"
               ],
               "Resource": [
                 {
@@ -190,6 +194,29 @@
                     [
                       {
                         "Ref": "storagedailysudokuArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Query",
+                "dynamodb:GetItem"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storagesudokuanswersArn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storagesudokuanswersArn"
                       },
                       "index/*"
                     ]
