@@ -1,32 +1,34 @@
 import { FC, useState } from 'react'
 import { Color, Vector3 } from 'three'
 import { connect } from 'react-redux'
-import { ActionTypes, click_cube } from '../../Redux/actions'
-import { SudokuGameState } from '../../Redux/store'
+import { ActionTypes, click_cube } from '../../../Redux/actions'
+import { CubeDetails } from '../../SudokuGame'
+import { SudokuGameState } from '../../../Redux/gameState'
+
 
 interface CubeProps {
-  index: number
   colors: (Color|null)[]
   position: Vector3
-  colorIndex?: number
+  index: number
+  cubeDetails?: CubeDetails
   solved?: boolean
-  given?: boolean
   clickCube?: (index: number) => void
 }
 
-const Cube: FC<CubeProps> = (props) => {
-  const defProps = {
-    ...props,
-    colorIndex: props.colorIndex ?? 0,
-    solved: props.solved ?? false,
-    given: props.given ?? true,
-    clickCube: props.clickCube ?? ((_) => {null})
-  }
-
-  const newOpacity = defProps.colorIndex + 1 === defProps.colors.length ? 0 : (defProps.given ? 1 : .8)
+const Cube: FC<CubeProps> = ({colors, position, cubeDetails, solved, clickCube}) => {
+  console.log('Rerender Cube')
+  const defCubeDetails = cubeDetails ?? {given: true, index: 0, colorIndex: 0}
+  const newOpacity = defCubeDetails.colorIndex + 1 === colors.length ? 0 : (defCubeDetails.given ? 1 : .8)
   const [opacity, setOpacity] = useState(newOpacity)
+  
   if (opacity !== newOpacity) {
     setOpacity(newOpacity)
+  }
+
+  function handleClick() {
+    if (solved && clickCube) {
+      clickCube(defCubeDetails.index)
+    }
   }
   
   // function handleHover(over: boolean) {
@@ -37,33 +39,34 @@ const Cube: FC<CubeProps> = (props) => {
 
   return (
     <>
-      {/* <mesh position={defProps.position}>
+      {/* <mesh position={position}>
         <boxGeometry parameters={{width: 10, height: 10, depth: 10, widthSegments: 1, heightSegments: 1, depthSegments: 1}} />
-        <meshStandardMaterial color={defProps.solved ? 'gold' : 'purple'}/>
+        <meshStandardMaterial color={solved ? 'gold' : 'purple'}/>
       </mesh> */}
       <mesh
-        position={defProps.position}
-        onClick={(_) => {if (!defProps.solved) defProps.clickCube(defProps.index ?? 0)}}
+        position={position}
+        onClick={(_) => handleClick()}
         // onPointerOver={(_) => handleHover(true)}
         // onPointerOut={(_) => handleHover(false)}
         >
         <boxGeometry parameters={{width: 70, height: 7, depth: 7, widthSegments: 1, heightSegments: 1, depthSegments: 1}}/>
-        <meshStandardMaterial transparent opacity={opacity} color={defProps.colors[defProps.colorIndex] ?? undefined}/>
+        <meshStandardMaterial 
+          transparent 
+          opacity={opacity} 
+          color={colors[defCubeDetails.colorIndex] ?? undefined}/>
       </mesh>
     </>
   )
 };
 
 const mapStateToProps: (state: SudokuGameState, ownProps: CubeProps) => unknown = (state, ownProps) => {
-  const cubeDetails = state.cubeDetails[ownProps.index];
   return {
     solved: state.solved,
-    colorIndex: cubeDetails.colorIndex,
-    given: cubeDetails.given
+    cubeDetails: state.gameDetails[ownProps.index]
   }
 }
 
-const mapDispatchToProps = (dispatch: (arg0: { type: ActionTypes; payload: number }) => unknown) => {
+const mapDispatchToProps = (dispatch: (arg0: { type: ActionTypes; payload: unknown }) => unknown) => {
   return {
     clickCube: (index: number) => dispatch(click_cube(index))
   }

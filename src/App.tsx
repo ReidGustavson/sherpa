@@ -1,9 +1,13 @@
-import { FC, useEffect } from 'react'; 
+import { FC, useEffect, useState } from 'react'; 
 import './App.scss';
 import BodyRoutes from './components/BodyRoutes/BodyRoutes';
 import RSNRoutes from './components/RSNRoutes/RSNRoutes';
 import { ProvideAuth } from './components/Auth/Auth';
+import { Provider } from 'react-redux'
 import Header from './pages/Section/Header/Header';
+import { withCookies } from 'react-cookie';
+import sudokuReducer from './pages/Sudoku/Redux/reducer';
+import { configureStore } from '@reduxjs/toolkit'
 
 const myDiv  = (word: string) => {
   return (
@@ -18,17 +22,19 @@ const App: FC = () => {
 
   return(
     <ProvideAuth>
-      <div className="App">
-        <div className='header'>{<Header logoSource='logo192.png'/>}</div> 
-        <div className='content'>
-          {true && <div className='leftsidenav'>{myDiv('sideOne')}</div>}
-          <div className='body'><BodyRoutes/></div>
-          {true && <div className='rightsidenav'><RSNRoutes/></div>} 
+      <Provider store={configureStore({reducer: sudokuReducer})}>
+        <div className="App">
+          <div className='header'>{<Header logoSource='logo192.png'/>}</div> 
+          <div className='content'>
+            {true && <div className='leftsidenav'>{myDiv('sideOne')}</div>}
+            <div className='body'><BodyRoutes/></div>
+            {true && <div className='rightsidenav'><RSNRoutes/></div>} 
+          </div>
+          <div className='footer'>{myDiv('footer')}</div>
         </div>
-        <div className='footer'>{myDiv('footer')}</div>
-      </div>
+      </Provider>
     </ProvideAuth>
   )
 };
 
-export default App;
+export default withCookies(App);

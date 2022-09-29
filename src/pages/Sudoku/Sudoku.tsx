@@ -1,18 +1,27 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { Canvas }  from '@react-three/fiber';
 import { OrbitControls, Stars } from "@react-three/drei";
 import styles from './Sudoku.module.scss';
 import SudokuGame from './SudokuGame/SudokuGame.lazy';
 import * as THREE from 'three';
 import { Color } from 'three';
+import { connect } from 'react-redux'
+import { ActionTypes, set_game_size } from './Redux/actions';
+import { SudokuGameState } from './Redux/gameState';
 
-const Sudoku: FC = () => {
-  console.log('Rerender Suoku')
-  const [gameSize] = useState(3)
-  
+interface SudokuProps {
+  gameSize?: number
+  setGameSize?: (gameSize: number) => void
+}
+
+const Sudoku: FC<SudokuProps> = ({gameSize, setGameSize}) => {
   useEffect(() => {
     document.title = `Sudoku`;
   });
+  console.log('Rerender Sudoku')
+  if(gameSize===0 && setGameSize) {
+    setGameSize(3)
+  }
 
   const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 10000 )
   camera.position.x = 10
@@ -60,10 +69,21 @@ const Sudoku: FC = () => {
         <OrbitControls/>
         <Stars />
         <ambientLight color={new Color('white')} intensity={1}/> 
-        <SudokuGame gameSize={gameSize}/>
+        <SudokuGame/>
       </Canvas>
     </div>
   );
 };
 
-export default Sudoku;
+const mapStateToProps: (state: SudokuGameState, ownProps: SudokuProps) => unknown = (state, _) => {
+  console.log('IN sudoku: ', state.gameSize)
+  return {
+    gameSize: state.gameSize
+  }
+}
+
+const mapDispatchToProps = (dispatch: (arg0: { type: ActionTypes; payload: unknown}) => unknown) => {
+  return { setGameSize: (gameSize: number) => {console.log('Setting gamesize', gameSize);dispatch(set_game_size(gameSize))}}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sudoku)

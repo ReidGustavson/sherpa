@@ -5,19 +5,15 @@ import Cube from './Cube/Cube';
 
 interface CubeCubeProps {
   colors: (Color | null)[]
-  cubeIndexes: number[]
+  indexes: number[]
   position: Vector3
 }
 
-const CubeCube: FC<CubeCubeProps> = ({colors, cubeIndexes, position}) => {
-  //if (solved) {
-    // useFrame(() => {
-    //   if (msh.current?.rotation) {
-    //     msh.current.rotation.x += 0.01
-    // }})
-  //}
-  const cubeSize = Math.cbrt(cubeIndexes.length)
+const CubeCube: FC<CubeCubeProps> = ({colors, indexes, position}) => {
+  console.log('Rerender CubeCube')
+  const cubeSize = Math.cbrt(indexes.length)
   const offset = Math.floor(cubeSize/2)
+  
   function getPosition(index: number){
     const x = (index % cubeSize - offset)
     const y = (Math.floor(index / cubeSize) % cubeSize - offset)
@@ -28,16 +24,17 @@ const CubeCube: FC<CubeCubeProps> = ({colors, cubeIndexes, position}) => {
   return (
     <>
       {
-        cubeIndexes.map((indexValue) => 
+        indexes.map((index) => 
           <Cube
-            key={indexValue}
-            index={indexValue}
+            key={index}
+            index={index}
             colors={colors}
-            position={getPosition(indexValue)}/>
+            position={getPosition(index)}
+            />
         )
       }
     </>
   )
 };
 
-export default CubeCube;
+export default CubeCube
