@@ -10,12 +10,13 @@ interface ActionPayload extends Action<ActionTypes> {
 }
 const initialState = {
   gameSize: 0,
-  gameDetails: [],
+  gameDetails: [] as CubeDetails[],
   solved: false,
   nullCubes: 0
 };
 
 const sudokuReducer : Reducer = (state: SudokuGameState = initialState, action: ActionPayload) => {
+  console.log("I'm in the reducer yo")
   switch (action.type) {
     case ActionTypes.CLICK_CUBE:
       return clickCube(JSON.parse(JSON.stringify(state)), action.payload as number)
@@ -54,7 +55,7 @@ export function setGameSize(state: SudokuGameState, gameSize: number) {
   return {
     gameSize: gameSize,
     solved: false,
-    gameDetails: [],
+    gameDetails: [] as CubeDetails[],
     nullCubes: 0
   }
 }
@@ -66,7 +67,7 @@ export function setGame(gameDetails: CubeDetails[]) {
     gameDetails: gameDetails?.map(x => {return {index: x.index, given: x.given, colorIndex: x.colorIndex}}) ?? [],
     solved: false,
     nullCubes: nullCubes,
-    gameSize: gameDetails?.length
+    gameSize: Math.cbrt(gameDetails?.length)
   }
   if (nullCubes === 0) {
     gameState = checkForWin(gameState)

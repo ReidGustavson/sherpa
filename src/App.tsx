@@ -1,13 +1,12 @@
-import { FC, useEffect, useState } from 'react'; 
+import { FC, useEffect } from 'react'; 
 import './App.scss';
 import BodyRoutes from './components/BodyRoutes/BodyRoutes';
 import RSNRoutes from './components/RSNRoutes/RSNRoutes';
 import { ProvideAuth } from './components/Auth/Auth';
 import { Provider } from 'react-redux'
 import Header from './pages/Section/Header/Header';
+import { store } from './redux/reduxStore';
 import { withCookies } from 'react-cookie';
-import sudokuReducer from './pages/Sudoku/Redux/reducer';
-import { configureStore } from '@reduxjs/toolkit'
 
 const myDiv  = (word: string) => {
   return (
@@ -22,7 +21,7 @@ const App: FC = () => {
 
   return(
     <ProvideAuth>
-      <Provider store={configureStore({reducer: sudokuReducer})}>
+      <Provider store={store}>
         <div className="App">
           <div className='header'>{<Header logoSource='logo192.png'/>}</div> 
           <div className='content'>
@@ -37,4 +36,4 @@ const App: FC = () => {
   )
 };
 
-export default withCookies(App);
+export default withCookies(App)

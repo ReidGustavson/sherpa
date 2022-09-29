@@ -5,22 +5,21 @@ import styles from './Sudoku.module.scss';
 import SudokuGame from './SudokuGame/SudokuGame.lazy';
 import * as THREE from 'three';
 import { Color } from 'three';
-import { connect } from 'react-redux'
-import { ActionTypes, set_game_size } from './Redux/actions';
-import { SudokuGameState } from './Redux/gameState';
+import { set_game_size } from './Redux/actions';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { Provider } from 'react-redux'
+import { store } from '../../redux/reduxStore';
 
-interface SudokuProps {
-  gameSize?: number
-  setGameSize?: (gameSize: number) => void
-}
-
-const Sudoku: FC<SudokuProps> = ({gameSize, setGameSize}) => {
+const Sudoku: FC = () => {
+  const gameSize = useAppSelector((state) => state.sudoku.gameSize)
+  console.log('Rerender Sudoku: ', gameSize)
+  const dispatch = useAppDispatch()
+  
   useEffect(() => {
     document.title = `Sudoku`;
   });
-  console.log('Rerender Sudoku')
-  if(gameSize===0 && setGameSize) {
-    setGameSize(3)
+  if(gameSize === 0) {
+    dispatch(set_game_size(3)) 
   }
 
   const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 10000 )
@@ -69,21 +68,12 @@ const Sudoku: FC<SudokuProps> = ({gameSize, setGameSize}) => {
         <OrbitControls/>
         <Stars />
         <ambientLight color={new Color('white')} intensity={1}/> 
-        <SudokuGame/>
+        <Provider store={store}>
+          <SudokuGame/>
+        </Provider>
       </Canvas>
     </div>
   );
 };
 
-const mapStateToProps: (state: SudokuGameState, ownProps: SudokuProps) => unknown = (state, _) => {
-  console.log('IN sudoku: ', state.gameSize)
-  return {
-    gameSize: state.gameSize
-  }
-}
-
-const mapDispatchToProps = (dispatch: (arg0: { type: ActionTypes; payload: unknown}) => unknown) => {
-  return { setGameSize: (gameSize: number) => {console.log('Setting gamesize', gameSize);dispatch(set_game_size(gameSize))}}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sudoku)
+export default Sudoku

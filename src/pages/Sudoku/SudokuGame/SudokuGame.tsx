@@ -1,17 +1,10 @@
-import { connect } from 'react-redux'
 import { FC, ReactElement, useState } from 'react'
 import { Color, Vector3 } from 'three'
 import CubeCube from './CubeCube/CubeCube'
 import { getCubeIndexes } from './CubeMath'
 import {API} from 'aws-amplify'
-import { ActionTypes, set_game } from '../Redux/actions'
-import { SudokuGameState } from '../Redux/gameState'
-
-interface SudokuGameProps {
-  gameSize?: number
-  gameDetails?: CubeDetails[]
-  setGame?: (gameDetails: CubeDetails[]) => void
-}
+import { set_game } from '../Redux/actions'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 
 export interface CubeDetails {
   index: number
@@ -22,18 +15,21 @@ export interface CubeDetails {
 const ApiName = 'sudokuDaily'
 const path = '/sudoku/daily'
 
-const SudokuGame: FC<SudokuGameProps> = ({gameSize, gameDetails, setGame}) => {
+const SudokuGame: FC = () => {
   console.log('Rerender SudokuGame')
+  const gameSize = useAppSelector((state) => state.sudoku.gameSize)
+  const cubesLoaded = useAppSelector((state) => state.sudoku.gameDetails.length > 0)
+  const dispatch = useAppDispatch()
   const [colors, setColors] = useState<(Color|null)[]>()
   const [loading, setLoading] = useState(false)
 
-  if (!!gameSize && colors?.length !== gameSize + 1) {
+  if (gameSize > 0 && colors?.length !== gameSize + 1) {
     assignColors()
   }
-  if (loading && !!gameDetails) {
+  if (loading && cubesLoaded) {
     setLoading(false)
   }
-  if (!gameDetails && !loading) {
+  if (!loading && !cubesLoaded) {
     loadGame()
   }
 
@@ -46,17 +42,14 @@ const SudokuGame: FC<SudokuGameProps> = ({gameSize, gameDetails, setGame}) => {
     setLoading(true)
     API.get(ApiName, path + '/' + gameSize, {}).then(response => {
       const newGameDetails = response.values.map((x: number, i: number) => {
-        return {colorIndex: x, index: i, given: x < (gameSize ?? 0)}
+        return {colorIndex: x, index: i, given: x < (gameSize)}
       })
-      if (setGame) {
-        console.log('Setting game')
-        setGame(newGameDetails)
-      }
+      dispatch(set_game(newGameDetails))
     })
   }
 
   function makeCubes(): ReactElement[] {
-    const cubeIndexes = getCubeIndexes((gameSize ?? 0))
+    const cubeIndexes = getCubeIndexes((gameSize))
     const cubes: JSX.Element[] = []
     for (let i = 0; i < cubeIndexes.length; i++) {
       cubes.push(
@@ -69,21 +62,14 @@ const SudokuGame: FC<SudokuGameProps> = ({gameSize, gameDetails, setGame}) => {
     }
     return cubes
   }
+
+  function shouldRenderGame(): boolean {
+    const colorsSet = colors?.length === gameSize + 1
+    return cubesLoaded && colorsSet
+  }
   return (
-    <> { !!gameDetails && !!colors && makeCubes()} </>
+    <>{shouldRenderGame() && makeCubes()}</>
   );
 };
 
-const mapStateToProps: (state: SudokuGameState, ownProps: SudokuGameProps) => unknown = (state, _) => {
-  console.log('IN sudokuGame')
-  return {
-    gameSize: state.gameSize,
-    gameDetails: state.gameDetails
-  }
-}
-
-const mapDispatchToProps = (dispatch: (arg0: { type: ActionTypes; payload: unknown}) => unknown) => {
-  return { setGame: (gameDetails: CubeDetails[]) => dispatch(set_game(gameDetails))}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SudokuGame)
+export default SudokuGame

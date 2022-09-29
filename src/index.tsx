@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render( 
-  <CookiesProvider>
+ <CookiesProvider>
     <Helmet>
       <title>My Title</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +25,7 @@ root.render(
         <App/>
       </BrowserRouter>
     </React.StrictMode>
-  </CookiesProvider>
+  </CookiesProvider> 
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,24 +1,22 @@
 import { FC, useState } from 'react'
 import { Color, Vector3 } from 'three'
-import { connect } from 'react-redux'
-import { ActionTypes, click_cube } from '../../../Redux/actions'
+import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks'
+import { click_cube } from '../../../Redux/actions'
 import { CubeDetails } from '../../SudokuGame'
-import { SudokuGameState } from '../../../Redux/gameState'
-
+import { shallowEqual } from 'react-redux'
 
 interface CubeProps {
   colors: (Color|null)[]
   position: Vector3
   index: number
-  cubeDetails?: CubeDetails
-  solved?: boolean
-  clickCube?: (index: number) => void
 }
 
-const Cube: FC<CubeProps> = ({colors, position, cubeDetails, solved, clickCube}) => {
+const Cube: FC<CubeProps> = ({colors, index, position}) => {
   console.log('Rerender Cube')
-  const defCubeDetails = cubeDetails ?? {given: true, index: 0, colorIndex: 0}
-  const newOpacity = defCubeDetails.colorIndex + 1 === colors.length ? 0 : (defCubeDetails.given ? 1 : .8)
+  const cubeDetails: CubeDetails = useAppSelector((state) => state.sudoku.gameDetails[index], shallowEqual)
+  const solved = useAppSelector((state) => state.sudoku.solved)
+  const dispatch = useAppDispatch()
+  const newOpacity = cubeDetails.colorIndex + 1 === colors.length ? 0 : (cubeDetails.given ? 1 : .8)
   const [opacity, setOpacity] = useState(newOpacity)
   
   if (opacity !== newOpacity) {
@@ -26,8 +24,8 @@ const Cube: FC<CubeProps> = ({colors, position, cubeDetails, solved, clickCube})
   }
 
   function handleClick() {
-    if (solved && clickCube) {
-      clickCube(defCubeDetails.index)
+    if (!solved) {
+      dispatch(click_cube(index))
     }
   }
   
@@ -53,23 +51,10 @@ const Cube: FC<CubeProps> = ({colors, position, cubeDetails, solved, clickCube})
         <meshStandardMaterial 
           transparent 
           opacity={opacity} 
-          color={colors[defCubeDetails.colorIndex] ?? undefined}/>
+          color={colors[cubeDetails.colorIndex] ?? undefined}/>
       </mesh>
     </>
   )
 };
 
-const mapStateToProps: (state: SudokuGameState, ownProps: CubeProps) => unknown = (state, ownProps) => {
-  return {
-    solved: state.solved,
-    cubeDetails: state.gameDetails[ownProps.index]
-  }
-}
-
-const mapDispatchToProps = (dispatch: (arg0: { type: ActionTypes; payload: unknown }) => unknown) => {
-  return {
-    clickCube: (index: number) => dispatch(click_cube(index))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Cube)
+export default Cube
