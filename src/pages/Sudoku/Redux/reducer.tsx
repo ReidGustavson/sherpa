@@ -38,7 +38,7 @@ const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action:
     case ActionTypes.SET_GAME:
       return {...state, currentGame: setGame(action.payload as CubeDetails[])}
     case ActionTypes.SET_GAME_SIZE:
-      return setGameSize(state, action.payload as number)
+      return setGameSize(copyObject<SudokuDayState>(state), action.payload as number)
     default:
       return state
   }
