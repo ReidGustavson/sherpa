@@ -6,7 +6,6 @@ import { ProvideAuth } from './components/Auth/Auth';
 import { Provider } from 'react-redux'
 import Header from './pages/Section/Header/Header';
 import { store } from './redux/reduxStore';
-import { withCookies } from 'react-cookie';
 
 const myDiv  = (word: string) => {
   return (
@@ -36,4 +35,4 @@ const App: FC = () => {
   )
 };
 
-export default withCookies(App)
+export default App

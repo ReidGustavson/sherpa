@@ -13,8 +13,8 @@ interface CubeProps {
 
 const Cube: FC<CubeProps> = ({colors, index, position}) => {
   console.log('Rerender Cube')
-  const cubeDetails: CubeDetails = useAppSelector((state) => state.sudoku.gameDetails[index], shallowEqual)
-  const solved = useAppSelector((state) => state.sudoku.solved)
+  const cubeDetails: CubeDetails = useAppSelector((state) => state.sudoku.currentGame.gameDetails[index], shallowEqual)
+  const solved = useAppSelector((state) => state.sudoku.currentGame.solved)
   const dispatch = useAppDispatch()
   const newOpacity = cubeDetails.colorIndex + 1 === colors.length ? 0 : (cubeDetails.given ? 1 : .8)
   const [opacity, setOpacity] = useState(newOpacity)

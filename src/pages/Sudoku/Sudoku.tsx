@@ -11,7 +11,7 @@ import { Provider } from 'react-redux'
 import { store } from '../../redux/reduxStore';
 
 const Sudoku: FC = () => {
-  const gameSize = useAppSelector((state) => state.sudoku.gameSize)
+  const gameSize = useAppSelector((state) => state.sudoku.currentGame.gameSize)
   console.log('Rerender Sudoku: ', gameSize)
   const dispatch = useAppDispatch()
   

@@ -50,9 +50,12 @@ app.get(path, function(req, res) {
 });
 
 function getDailyPuzzle(dim, res) {
-  let params = {}  
-  const today = new Date().toISOString().slice(0, 10).replace("-","")
-  const dailyPartitionKey = today+"_"+dim
+  let params = {}
+  const today = new Date()
+  // hack to not have to worry about timezones.
+  today.setDate(today.getDate() + 1)
+  const todayString = today.toISOString().slice(0, 10).replace("-","")
+  const dailyPartitionKey = todayString+"_"+dim
   params[dailySudoku.partitionKeyName] = dailyPartitionKey
 
   let getItemParams = {

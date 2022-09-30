@@ -17,8 +17,8 @@ const path = '/sudoku/daily'
 
 const SudokuGame: FC = () => {
   console.log('Rerender SudokuGame')
-  const gameSize = useAppSelector((state) => state.sudoku.gameSize)
-  const cubesLoaded = useAppSelector((state) => state.sudoku.gameDetails.length > 0)
+  const gameSize = useAppSelector((state) => state.sudoku.currentGame.gameSize)
+  const cubesDetailsLoaded = useAppSelector((state) => state.sudoku.currentGame.gameDetails.length > 0)
   const dispatch = useAppDispatch()
   const [colors, setColors] = useState<(Color|null)[]>()
   const [loading, setLoading] = useState(false)
@@ -26,10 +26,10 @@ const SudokuGame: FC = () => {
   if (gameSize > 0 && colors?.length !== gameSize + 1) {
     assignColors()
   }
-  if (loading && cubesLoaded) {
+  if (loading && cubesDetailsLoaded) {
     setLoading(false)
   }
-  if (!loading && !cubesLoaded) {
+  if (!loading && !cubesDetailsLoaded) {
     loadGame()
   }
 
@@ -39,6 +39,7 @@ const SudokuGame: FC = () => {
   }
 
   function loadGame() {
+    console.log('Loading')
     setLoading(true)
     API.get(ApiName, path + '/' + gameSize, {}).then(response => {
       const newGameDetails = response.values.map((x: number, i: number) => {
@@ -65,7 +66,7 @@ const SudokuGame: FC = () => {
 
   function shouldRenderGame(): boolean {
     const colorsSet = colors?.length === gameSize + 1
-    return cubesLoaded && colorsSet
+    return cubesDetailsLoaded && colorsSet
   }
   return (
     <>{shouldRenderGame() && makeCubes()}</>

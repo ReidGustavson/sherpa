@@ -2,26 +2,41 @@ import { ActionTypes } from "./actions";
 import { Action } from 'redux';
 import type { Reducer } from '@reduxjs/toolkit'
 import { checkForSolve } from "../SudokuGame/CubeMath";
-import { SudokuGameState } from "./gameState";
+import { SudokuDayState, SudokuGameState } from "./gameState";
 import { CubeDetails } from "../SudokuGame/SudokuGame";
 
 interface ActionPayload extends Action<ActionTypes> {
   payload?: unknown
 }
-const initialState = {
-  gameSize: 0,
-  gameDetails: [] as CubeDetails[],
-  solved: false,
-  nullCubes: 0
-};
 
-const sudokuReducer : Reducer = (state: SudokuGameState = initialState, action: ActionPayload) => {
-  console.log("I'm in the reducer yo")
+function getDateString() {
+  return new Date().toISOString().slice(0, 10).replace("-","")
+}
+
+export const initialState = () => { 
+  return {
+    day: getDateString(),
+    currentGame: {gameSize: 3, gameDetails: [], nullCubes: 0, solved: false},
+    games: [] as SudokuGameState[]
+  }
+}
+
+function copyObject<T>(obj: unknown): T {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action: ActionPayload) => {
+  if (state.day !== getDateString()) {
+    console.log('NEW DAY', getDateString())
+    const currentGame = {gameDetails: [], nullCubes: 0, solved: false, gameSize: state.currentGame.gameSize}
+    return {day: getDateString(), games: [], currentGame: currentGame}
+  }
+  
   switch (action.type) {
     case ActionTypes.CLICK_CUBE:
-      return clickCube(JSON.parse(JSON.stringify(state)), action.payload as number)
+      return {...state, currentGame: clickCube(copyObject<SudokuGameState>(state.currentGame), action.payload as number)}
     case ActionTypes.SET_GAME:
-      return setGame(action.payload as CubeDetails[])
+      return {...state, currentGame: setGame(action.payload as CubeDetails[])}
     case ActionTypes.SET_GAME_SIZE:
       return setGameSize(state, action.payload as number)
     default:
@@ -29,75 +44,52 @@ const sudokuReducer : Reducer = (state: SudokuGameState = initialState, action: 
   }
 }
 
-export function setGameSize(state: SudokuGameState, gameSize: number) {
-  if (state.gameSize === gameSize) {
-    return state
+export function setGameSize(state: SudokuDayState, gameSize: number) {
+  let newCurrentGame = state.games.find((game: SudokuGameState) => game.gameSize === gameSize)
+  newCurrentGame = newCurrentGame ?? {gameDetails: [], nullCubes: 0, solved: false, gameSize: gameSize}
+  const newGamesList = state.games.filter((game: SudokuGameState) => game.gameSize !== gameSize)
+  if (state.currentGame.gameDetails.length > 0) {
+    newGamesList.push(state.currentGame)
   }
-// const date = new Date().toDateString()
-//     if (cookies['today-sudoku-levels']?.day !== date) {
-//       removeCookie('today-sudoku-levels')
-//     } else if (cookies['today-sudoku-levels'][gameSize]) {
-//       setGame(cookies['today-sudoku-levels'][gameSize])
-//       return
-//     }
-//     API.get(ApiName, path + '/' + gameSize, {}).then(response => {
-//       const gameDetails = response.values.map((x: number, i: number) => {
-//         return {colorIndex: x, index: i, given: x < gameSize}
-//       })
-//       setCookie('today-sudoku-levels', {
-//         ...cookies, 
-//         day: date,
-//         [gameSize]: gameDetails
-//       })
-//       setGame(response.values)
-//     })
-//     setLoading(true)
-  return {
-    gameSize: gameSize,
-    solved: false,
-    gameDetails: [] as CubeDetails[],
-    nullCubes: 0
-  }
+  state.currentGame = newCurrentGame
+  state.games = newGamesList
+  return state
 }
 
-export function setGame(gameDetails: CubeDetails[]) {
-  console.log(gameDetails)
+export function setGame(gameDetails: CubeDetails[]): SudokuGameState {
   const nullCubes = gameDetails?.filter(cube => cube.colorIndex === Math.cbrt(gameDetails.length)).length ?? 0
-  let gameState = {
+  const gameState = {
     gameDetails: gameDetails?.map(x => {return {index: x.index, given: x.given, colorIndex: x.colorIndex}}) ?? [],
     solved: false,
     nullCubes: nullCubes,
     gameSize: Math.cbrt(gameDetails?.length)
   }
   if (nullCubes === 0) {
-    gameState = checkForWin(gameState)
+    checkForWin(gameState)
   }
   return gameState
 }
 
-export function clickCube(state: SudokuGameState, index: number): SudokuGameState {
-  if (!state.solved && !state.gameDetails[index].given) {
-    if (state.gameDetails[index].colorIndex === state.gameSize) {
-      state.nullCubes--
+export function clickCube(gameState: SudokuGameState, index: number): SudokuGameState {
+  if (!gameState.solved && !gameState.gameDetails[index].given) {
+    if (gameState.gameDetails[index].colorIndex === gameState.gameSize) {
+      gameState.nullCubes--
     }
 
-    state.gameDetails[index].colorIndex = ++state.gameDetails[index].colorIndex % (state.gameSize + 1)
-    if (state.gameDetails[index].colorIndex === state.gameSize) {
-      state.nullCubes++
+    gameState.gameDetails[index].colorIndex = ++gameState.gameDetails[index].colorIndex % (gameState.gameSize + 1)
+    if (gameState.gameDetails[index].colorIndex === gameState.gameSize) {
+      gameState.nullCubes++
     }
-    return checkForWin(state)
+    checkForWin(gameState)
   }
-  return state
+  return gameState
 }
 
-function checkForWin(state: SudokuGameState): SudokuGameState {
+function checkForWin(state: SudokuGameState) {
   if (state.nullCubes > 0) {
     state.solved = false
-    return state
   }
-
   state.solved = checkForSolve(state.gameDetails.map(x => x.colorIndex))
-  return state
 }
 
 export default sudokuReducer
