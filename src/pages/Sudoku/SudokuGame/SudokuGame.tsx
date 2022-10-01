@@ -2,15 +2,10 @@ import { FC, ReactElement, useState } from 'react'
 import { Color, Vector3 } from 'three'
 import CubeCube from './CubeCube/CubeCube'
 import { getCubeIndexes } from './CubeMath'
-import {API} from 'aws-amplify'
+import { API } from 'aws-amplify'
 import { set_game } from '../Redux/actions'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
-
-export interface CubeDetails {
-  index: number
-  colorIndex: number
-  given: boolean
-}
+import styles from './SudokuGame.module.scss';
 
 const ApiName = 'sudokuDaily'
 const path = '/sudoku/daily'
@@ -54,11 +49,13 @@ const SudokuGame: FC = () => {
     const cubes: JSX.Element[] = []
     for (let i = 0; i < cubeIndexes.length; i++) {
       cubes.push(
-        <CubeCube
-          key={i}
-          colors={colors ?? []}
-          indexes={cubeIndexes[i]}
-          position={new Vector3(0, i*6,0)}/>
+        <div key={i}>
+          <CubeCube
+            colors={colors ?? []}
+            indexes={cubeIndexes[i]}
+            position={new Vector3(0, i*6,0)}
+            cubeCubeIndex={i}/>
+        </div>
       );
     }
     return cubes
@@ -68,8 +65,11 @@ const SudokuGame: FC = () => {
     const colorsSet = colors?.length === gameSize + 1
     return cubesDetailsLoaded && colorsSet
   }
+
   return (
-    <>{shouldRenderGame() && makeCubes()}</>
+    <div className={styles.SudokuStyle}>
+      {shouldRenderGame() && makeCubes()}
+    </div>
   );
 };
 

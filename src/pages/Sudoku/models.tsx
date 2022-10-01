@@ -1,5 +1,3 @@
-import { CubeDetails } from "../SudokuGame/SudokuGame"
-
 export interface SudokuDayState {
   day: string
   currentGame: SudokuGameState
@@ -11,4 +9,10 @@ export interface SudokuGameState {
   gameSize: number
   nullCubes: number
   gameDetails: CubeDetails[]
+}
+
+export interface CubeDetails {
+  index: number
+  colorIndex: number
+  given: boolean
 }

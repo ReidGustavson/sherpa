@@ -1,9 +1,10 @@
-import { CubeDetails } from "../SudokuGame/SudokuGame"
+import { CubeDetails } from "../models"
 
 export enum ActionTypes {
   CLICK_CUBE,
   SET_GAME,
-  SET_GAME_SIZE
+  SET_GAME_SIZE,
+  RESET_GAME
 }
 
 export const click_cube = (index: number) => {
@@ -24,5 +25,11 @@ export const set_game_size = (game_size: number) => {
   return {
     type: ActionTypes.SET_GAME_SIZE,
     payload: game_size
+  }
+}
+
+export const reset_game = () => {
+  return {
+    type: ActionTypes.RESET_GAME
   }
 }

@@ -2,8 +2,7 @@ import { ActionTypes } from "./actions";
 import { Action } from 'redux';
 import type { Reducer } from '@reduxjs/toolkit'
 import { checkForSolve } from "../SudokuGame/CubeMath";
-import { SudokuDayState, SudokuGameState } from "./gameState";
-import { CubeDetails } from "../SudokuGame/SudokuGame";
+import { SudokuDayState, SudokuGameState, CubeDetails } from "../models";
 
 interface ActionPayload extends Action<ActionTypes> {
   payload?: unknown
@@ -27,7 +26,6 @@ function copyObject<T>(obj: unknown): T {
 
 const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action: ActionPayload) => {
   if (state.day !== getDateString()) {
-    console.log('NEW DAY', getDateString())
     const currentGame = {gameDetails: [], nullCubes: 0, solved: false, gameSize: state.currentGame.gameSize}
     return {day: getDateString(), games: [], currentGame: currentGame}
   }
@@ -39,12 +37,19 @@ const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action:
       return {...state, currentGame: setGame(action.payload as CubeDetails[])}
     case ActionTypes.SET_GAME_SIZE:
       return setGameSize(copyObject<SudokuDayState>(state), action.payload as number)
+    case ActionTypes.RESET_GAME:
+      return {...state, currentGame: resetGame(copyObject<SudokuGameState>(state.currentGame))}
     default:
       return state
   }
 }
 
-export function setGameSize(state: SudokuDayState, gameSize: number) {
+function resetGame(state: SudokuGameState): SudokuGameState {
+  state.gameDetails.forEach(x => {if (!x.given) x.colorIndex = state.gameSize})
+  return state
+}
+
+function setGameSize(state: SudokuDayState, gameSize: number) {
   let newCurrentGame = state.games.find((game: SudokuGameState) => game.gameSize === gameSize)
   newCurrentGame = newCurrentGame ?? {gameDetails: [], nullCubes: 0, solved: false, gameSize: gameSize}
   const newGamesList = state.games.filter((game: SudokuGameState) => game.gameSize !== gameSize)
@@ -56,7 +61,9 @@ export function setGameSize(state: SudokuDayState, gameSize: number) {
   return state
 }
 
-export function setGame(gameDetails: CubeDetails[]): SudokuGameState {
+
+
+function setGame(gameDetails: CubeDetails[]): SudokuGameState {
   const nullCubes = gameDetails?.filter(cube => cube.colorIndex === Math.cbrt(gameDetails.length)).length ?? 0
   const gameState = {
     gameDetails: gameDetails?.map(x => {return {index: x.index, given: x.given, colorIndex: x.colorIndex}}) ?? [],
@@ -70,7 +77,7 @@ export function setGame(gameDetails: CubeDetails[]): SudokuGameState {
   return gameState
 }
 
-export function clickCube(gameState: SudokuGameState, index: number): SudokuGameState {
+function clickCube(gameState: SudokuGameState, index: number): SudokuGameState {
   if (!gameState.solved && !gameState.gameDetails[index].given) {
     if (gameState.gameDetails[index].colorIndex === gameState.gameSize) {
       gameState.nullCubes--

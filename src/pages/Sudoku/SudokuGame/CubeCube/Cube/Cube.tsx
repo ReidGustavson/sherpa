@@ -2,8 +2,8 @@ import { FC, useState } from 'react'
 import { Color, Vector3 } from 'three'
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks'
 import { click_cube } from '../../../Redux/actions'
-import { CubeDetails } from '../../SudokuGame'
 import { shallowEqual } from 'react-redux'
+import { CubeDetails } from '../../../models'
 
 interface CubeProps {
   colors: (Color|null)[]
@@ -41,12 +41,7 @@ const Cube: FC<CubeProps> = ({colors, index, position}) => {
         <boxGeometry parameters={{width: 10, height: 10, depth: 10, widthSegments: 1, heightSegments: 1, depthSegments: 1}} />
         <meshStandardMaterial color={solved ? 'gold' : 'purple'}/>
       </mesh> */}
-      <mesh
-        position={position}
-        onClick={(_) => handleClick()}
-        // onPointerOver={(_) => handleHover(true)}
-        // onPointerOut={(_) => handleHover(false)}
-        >
+      <mesh position={position} onClick={e => {e.stopPropagation(); handleClick()}}>
         <boxGeometry parameters={{width: 70, height: 7, depth: 7, widthSegments: 1, heightSegments: 1, depthSegments: 1}}/>
         <meshStandardMaterial 
           transparent 
