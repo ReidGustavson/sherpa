@@ -15,7 +15,6 @@ interface CubeCubeProps {
 }
 
 const CubeCube: FC<CubeCubeProps> = ({ colors, indexes }) => {
-  console.log('Rerender CubeCube')
   const cubeSize = Math.cbrt(indexes.length)
   const offset = (cubeSize / 2) -.5
   
@@ -26,7 +25,7 @@ const CubeCube: FC<CubeCubeProps> = ({ colors, indexes }) => {
     return new Vector3(x,y,z)
   }
 
-  const cubeCamera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 )
+  const cubeCamera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 15 )
   cubeCamera.position.set(0,0,cubeSize + 2)
   cubeCamera.lookAt(new Vector3(0,0,0))
   return (

@@ -46,6 +46,7 @@ const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action:
 
 function resetGame(state: SudokuGameState): SudokuGameState {
   state.gameDetails.forEach(x => {if (!x.given) x.colorIndex = state.gameSize})
+  state.solved = false
   return state
 }
 

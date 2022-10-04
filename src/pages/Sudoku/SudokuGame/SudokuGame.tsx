@@ -11,7 +11,6 @@ const ApiName = 'sudokuDaily'
 const path = '/sudoku/daily'
 
 const SudokuGame: FC = () => {
-  console.log('Rerender SudokuGame')
   const gameSize = useAppSelector((state) => state.sudoku.currentGame.gameSize)
   const cubesDetailsLoaded = useAppSelector((state) => state.sudoku.currentGame.gameDetails.length > 0)
   const dispatch = useAppDispatch()
