@@ -9,13 +9,13 @@ import PrivateOutlet from "../PrivateOutlet/PrivateOutlet";
 
 const BodyRoutes: FC = () => (
   <Routes>
-    <Route path="/" element={<HomePage/>}/>
+    {/* <Route path="/" element={<HomePage/>}/>
     <Route path="/signin" element={<SignInPage/>}/>
     <Route element={<PrivateOutlet/>}>
       <Route path="/private" element={<PrivatePage/>}/>
     </Route>
-    <Route path="/sudoku" element={<Sudoku/>}/>
-    <Route path="/*" element={<PageNotFound/>}/>
+    <Route path="/sudoku/*" element={<Sudoku/>}/> */}
+    <Route path="/*" element={<Sudoku/>}/>
   </Routes>
 );
 

@@ -46,7 +46,8 @@ const Cube: FC<CubeProps> = ({colors, index, position}) => {
         <meshStandardMaterial 
           transparent 
           opacity={opacity} 
-          color={colors[cubeDetails.colorIndex] ?? undefined}/>
+          color={colors[cubeDetails.colorIndex] ?? undefined}
+          depthWrite={false}/>
       </mesh>
     </>
   )

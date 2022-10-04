@@ -1,4 +1,13 @@
 .Sudoku {
   height: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: stretch;
+  * {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    width: 100%;
+  }
   background-color: black;
 }

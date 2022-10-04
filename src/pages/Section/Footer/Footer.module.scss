@@ -1,0 +1,15 @@
+@import 'src/variables.scss';
+.Footer {
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: $secondary-color;
+  border-bottom: 1px solid $primary-color;
+  @media only screen and (min-width: 400px) {
+    flex-direction: row;
+    justify-content: space-between;;
+  }
+}

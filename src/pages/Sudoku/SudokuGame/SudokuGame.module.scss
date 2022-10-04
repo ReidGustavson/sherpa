@@ -1,6 +1,8 @@
 .SudokuGame {
   display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-  height: 100%;
+  flex-flow: row wrap;
+  align-items: stretch ;
+  * {
+    width: 100%;
+  }
 }

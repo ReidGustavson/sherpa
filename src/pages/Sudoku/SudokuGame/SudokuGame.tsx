@@ -67,7 +67,7 @@ const SudokuGame: FC = () => {
   }
 
   return (
-    <div className={styles.SudokuStyle}>
+    <div className={styles.SudokuGame}>
       {shouldRenderGame() && makeCubes()}
     </div>
   );

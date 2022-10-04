@@ -1,5 +1,5 @@
 import { Canvas }  from '@react-three/fiber'
-import { OrbitControls, Stars } from "@react-three/drei"
+import { OrbitControls } from "@react-three/drei"
 import { FC } from 'react'
 import { PerspectiveCamera, Color, Vector3 } from 'three'
 import * as THREE from 'three'
@@ -27,12 +27,11 @@ const CubeCube: FC<CubeCubeProps> = ({ colors, indexes }) => {
   }
 
   const cubeCamera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 )
-  cubeCamera.position.set(0,0,6)
+  cubeCamera.position.set(0,0,cubeSize + 2)
   cubeCamera.lookAt(new Vector3(0,0,0))
   return (
     <Canvas camera={cubeCamera}>
       <OrbitControls/>
-      <Stars />
       <ambientLight color={new Color('white')} intensity={1}/> 
       <Provider store={store}>
       {

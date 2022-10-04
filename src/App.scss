@@ -6,6 +6,7 @@
   height: 100vh;
   div[class*='sidenav'] { 
     display: none; 
+    max-width: 30%;
     background-color: purple;
   }
 
@@ -20,7 +21,7 @@
     justify-content: space-between;
     > div {
       flex: 1 1 auto;
-      overflow: auto;
+      overflow: auto;    
     }
   }
 

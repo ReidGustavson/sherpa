@@ -16,8 +16,10 @@ const Sudoku: FC = () => {
 
   return (
     <div className={styles.Sudoku}>
-      {[3,4,5].map(i => <button key={i} onClick={() => dispatch(set_game_size(i)) }>{i}</button>)}
-      <button key='reset' onClick={() => dispatch(reset_game())}>Reset</button>
+      <div className='button-group'>
+        {[3,4,5].map(i => <button key={i} onClick={() => dispatch(set_game_size(i)) }>{i}</button>)}
+        <button key='reset' onClick={() => dispatch(reset_game())}>Reset</button>
+      </div>
       <SudokuGame/>
     </div>
   );
