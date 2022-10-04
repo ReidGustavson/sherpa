@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks'
 import { click_cube } from '../../../Redux/actions'
 import { shallowEqual } from 'react-redux'
 import { CubeDetails } from '../../../models'
+import * as THREE from 'three'
 
 interface CubeProps {
   colors: (Color|null)[]
@@ -28,28 +29,18 @@ const Cube: FC<CubeProps> = ({colors, index, position}) => {
       dispatch(click_cube(index))
     }
   }
-  
-  // function handleHover(over: boolean) {
-  //   if (cubeDetails.color && !cubeDetails.given) {
-  //      setOpacity(over ? .9 : .8)
-  //   }
-  // }
 
   return (
-    <>
-      {/* <mesh position={position}>
-        <boxGeometry parameters={{width: 10, height: 10, depth: 10, widthSegments: 1, heightSegments: 1, depthSegments: 1}} />
-        <meshStandardMaterial color={solved ? 'gold' : 'purple'}/>
-      </mesh> */}
-      <mesh position={position} onClick={e => {e.stopPropagation(); handleClick()}}>
-        <boxGeometry parameters={{width: 70, height: 7, depth: 7, widthSegments: 1, heightSegments: 1, depthSegments: 1}}/>
-        <meshStandardMaterial 
-          transparent 
-          opacity={opacity} 
-          color={colors[cubeDetails.colorIndex] ?? undefined}
-          depthWrite={false}/>
-      </mesh>
-    </>
+  <mesh position={position} onClick={e => {e.stopPropagation(); handleClick()}}>
+    <boxGeometry args={[.9,.9,.9]}/>
+    <meshBasicMaterial 
+      side={THREE.DoubleSide}
+      transparent={newOpacity != 1}
+      opacity={opacity} 
+      color={colors[cubeDetails.colorIndex] ?? undefined}
+      depthWrite={true}
+      />
+  </mesh>
   )
 };
 

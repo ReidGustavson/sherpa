@@ -31,7 +31,7 @@ const CubeCube: FC<CubeCubeProps> = ({ colors, indexes }) => {
   return (
     <Canvas camera={cubeCamera}>
       <OrbitControls/>
-      <ambientLight color={new Color('white')} intensity={1}/> 
+      <ambientLight color={new Color('white')} intensity={1}/>
       <Provider store={store}>
       {
         indexes.map((cubeIndex, index) => 
