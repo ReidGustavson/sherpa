@@ -1,3 +1,4 @@
+@import 'src/variables.scss';
 .App {
   display: flex;
   flex-direction: column;
@@ -5,9 +6,8 @@
   align-content: space-between;
   height: 100vh;
   div[class*='sidenav'] { 
-    display: none; 
-    max-width: 30%;
-    background-color: purple;
+    max-width: 100%;
+    background-color: $secondary-color;
   }
 
   .footer, .header {
@@ -15,9 +15,10 @@
   }
 
   > .content {
+    height: 100%;
     flex: 1 1 auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     > div {
       flex: 1 1 auto;
@@ -26,7 +27,8 @@
   }
 
   @media only screen and (min-width: 600px) { //768, 992, 1200
-    div[class*=sidenav] { display: block; }
+    div[class*='content'] { flex-direction: row; }
+    div[class*='sidenav'] { max-width: 30%; }
   }
 
   

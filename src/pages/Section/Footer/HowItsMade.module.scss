@@ -1,0 +1,9 @@
+.HowItsMade {
+  ul {
+    float: left;
+    list-style: none;
+    > li {
+      margin: 10px;
+    }
+  }
+}

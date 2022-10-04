@@ -1,8 +1,16 @@
+import styles from './GameExplainer.module.scss';
 const GameExplainer = () =>(
-  <div>
+  <div className={styles.GameExplainer}>
     <h2>Sudoku3D</h2>
     <a href="/" style={{float:"right"}}><button>X</button></a>
-    <p>Every row, column, and depth need to have exaclty one cube of each color. Click on the clear missing spaces to fill in with your guesses. In order to fill in cubes in the center, the inner cubes have been duplicated below. You&aposll notice that your guess cubes are slightly more transparent than the given ones. If you want to reset to the start, use the reset button.</p>
+    <ul>
+      <li>{"Goal: Put exactly one cube of each color on every row, column, and depth."}</li>
+      <li>{"How: Click on the missing gaps to rotate through the color choices"}</li>
+      <li>{"How to fill the center: The lower cubes are duplicates of the inner cubes."}</li>
+      <li>{"When: There are new puzzles daily."}</li>
+      <li>{"Game Size: The buttons 3/4/5 refer to the number of colors in each level"}</li>
+      <li>{"Note: The cubes you assign are more transparent than the given ones."}</li>
+    </ul>
   </div>
 );
 
