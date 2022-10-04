@@ -1,10 +1,11 @@
 @import 'src/variables.scss';
 .App {
+  min-height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   text-align: center;
   align-content: space-between;
-  height: 100vh;
   div[class*='sidenav'] { 
     max-width: 100%;
     background-color: $secondary-color;
@@ -15,12 +16,13 @@
   }
 
   > .content {
-    height: 100%;
+    min-height: 0;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     > div {
+      min-height: 0;
       flex: 1 1 auto;
       overflow: auto;    
     }
@@ -30,6 +32,4 @@
     div[class*='content'] { flex-direction: row; }
     div[class*='sidenav'] { max-width: 30%; }
   }
-
-  
 }

@@ -9,7 +9,7 @@ const HowItsMade = () =>(
       <li>{"Backend:\nNodejs"}</li>
       <li>{"Hosting:\nAWS amplify"}</li>
       <li>{"Graphics:\nThreejs"}</li>
-      <li>{"Redux/LocalStorage Usage:"}<ul>
+      <li>{"Redux/LocalStorage Advantages:"}<ul>
         <li>{"UX:\nStores level progress"}</li>
         <li>{"Cost:\nLimits the number of api callss"}</li>
         <li>{"Performance:\nLimits rerenders to the clicked cube"}</li>
