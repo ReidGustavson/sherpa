@@ -17,12 +17,14 @@
     display: flex;
     justify-content: stretch;
     flex-direction: column;
+    background-color: black;
     > div {
       min-height: 0;
-      flex: 1 1 auto;
+      flex: 20 1 auto;
       overflow: auto;    
     }
     div[class*='sidenav'] { 
+      flex: 1 1 auto;
       max-width: 100%;
       max-height: 250px;
       background-color: $secondary-color;
