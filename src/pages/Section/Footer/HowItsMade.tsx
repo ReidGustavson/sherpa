@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import styles from './HowItsMade.module.scss';
 
 const HowItsMade = () =>(
   <div className={styles.HowItsMade}>
     <h2>{"How it's made"}</h2>
-    <a href="/" style={{float:"right"}}><button>X</button></a>
+    <Link to="/" style={{float:"right"}}><button>X</button></Link>
     <ul style={{textAlign:'left'}}>
       <li>{"Frontend:\nReact"}</li>
       <li>{"Backend:\nNodejs"}</li>

@@ -33,7 +33,6 @@ const SudokuGame: FC = () => {
   }
 
   function loadGame() {
-    console.log('Loading')
     setLoading(true)
     API.get(ApiName, path + '/' + gameSize, {}).then(response => {
       const newGameDetails = response.values.map((x: number, i: number) => {
@@ -48,7 +47,7 @@ const SudokuGame: FC = () => {
     const cubes: JSX.Element[] = []
     for (let i = 0; i < cubeIndexes.length; i++) {
       cubes.push(
-        <div key={i}>
+        <div key={gameSize + '' + i}>
           <CubeCube
             colors={colors ?? []}
             indexes={cubeIndexes[i]}

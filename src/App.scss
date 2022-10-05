@@ -6,10 +6,6 @@
   flex-direction: column;
   text-align: center;
   align-content: space-between;
-  div[class*='sidenav'] { 
-    max-width: 100%;
-    background-color: $secondary-color;
-  }
 
   .footer, .header {
     width: 100%;
@@ -19,17 +15,22 @@
     min-height: 0;
     flex: 1 1 auto;
     display: flex;
-    flex-direction: column;
     justify-content: stretch;
+    flex-direction: column;
     > div {
       min-height: 0;
       flex: 1 1 auto;
       overflow: auto;    
     }
+    div[class*='sidenav'] { 
+      max-width: 100%;
+      background-color: $secondary-color;
+    }
   }
 
   @media only screen and (min-width: 600px) { //768, 992, 1200
     div[class*='content'] { flex-direction: row; }
-    div[class*='sidenav'] { max-width: 30%; }
+    > .content div[class*='sidenav'] { max-width: 30%; }
   }
+ 
 }

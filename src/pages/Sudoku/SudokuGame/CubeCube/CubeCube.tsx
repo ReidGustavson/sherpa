@@ -27,7 +27,7 @@ const CubeCube: FC<CubeCubeProps> = ({ colors, indexes }) => {
   }
 
   const cubeCamera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 15 )
-  cubeCamera.position.set(0,0,cubeSize + 2)
+  cubeCamera.position.set(0,0,cubeSize * 2 + 1)
   cubeCamera.lookAt(new Vector3(0,0,0))
   return (
     <Canvas camera={cubeCamera}>

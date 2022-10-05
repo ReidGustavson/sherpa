@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom';
 import styles from './GameExplainer.module.scss';
 const GameExplainer = () =>(
   <div className={styles.GameExplainer}>
     <h2>Sudoku3D</h2>
-    <a href="/" style={{float:"right"}}><button>X</button></a>
+    <Link to="/" style={{float:"right"}}><button>X</button></Link>
     <ul>
       <li>{"Goal: Put exactly one cube of each color on every row, column, and depth."}</li>
       <li>{"How To Change Colors: Click on the missing gaps to rotate through the colors."}</li>
