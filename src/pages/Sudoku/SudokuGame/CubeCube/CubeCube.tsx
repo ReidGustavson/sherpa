@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import Cube from './Cube/Cube'
 import { Provider } from 'react-redux'
 import { store } from '../../../../redux/reduxStore'
+import Border from './Border/Border'
 
 interface CubeCubeProps {
   colors: (Color | null)[]
@@ -34,14 +35,27 @@ const CubeCube: FC<CubeCubeProps> = ({ colors, indexes }) => {
       <ambientLight color={new Color('white')} intensity={1}/>
       <Provider store={store}>
       {
-        indexes.map((cubeIndex, index) => 
+        indexes.map((cubeIndex, index) => {
+        const position = getPosition(index)
+        return (
+          <Border
+            key={'border_'+cubeIndex}
+            position={position}
+            />
+        )}
+      )}
+      {
+        indexes.map((cubeIndex, index) => {
+        const position = getPosition(index)
+        return (
           <Cube
-            key={cubeIndex}
+            key={'cube_'+cubeIndex}
             index={cubeIndex}
             colors={colors}
-            position={getPosition(index)}
+            position={position}
             />
-        )
+        )}
+      )
       }
       </Provider>
       {/* <CameraHelper/> */}

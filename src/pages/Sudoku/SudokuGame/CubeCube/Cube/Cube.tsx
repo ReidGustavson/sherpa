@@ -32,7 +32,7 @@ const Cube: FC<CubeProps> = ({colors, index, position}) => {
 
   return (
   <mesh position={position} onClick={e => {e.stopPropagation(); handleClick()}}>
-    <boxGeometry args={[.9,.9,.9]}/>
+    <boxGeometry args={[.95,.95,.95]}/>
     <meshBasicMaterial 
       side={THREE.DoubleSide}
       transparent={newOpacity != 1}

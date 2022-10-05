@@ -28,7 +28,7 @@ const SudokuGame: FC = () => {
   }
 
   function assignColors() {
-    const choices = ['red', 'blue', 'green', 'purple', 'yellow'].splice(0, gameSize)
+    const choices = ['red', 'blue', 'rgb(0,100,100)', 'rgb(170, 255, 0)','fuchsia'].splice(0, gameSize)
     setColors([...choices.map(x => new Color(x)), null])
   }
 
