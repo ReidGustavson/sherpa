@@ -16,7 +16,7 @@ const root = ReactDOM.createRoot(
 root.render( 
  <>
     <Helmet>
-      <title>My Title</title>
+      <title>Sherpa</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </Helmet>
     <React.StrictMode>
