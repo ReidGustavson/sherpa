@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -18,7 +18,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["@react-three/fiber","node", "react", "react-dom", "three"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types",
+      "./node_modules/@react-three/fiber/dist/declarations"
+    ]
   },
   "include": [
     "src"

@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { Color, Vector3 } from 'three'
 import CubeCube from './CubeCube/CubeCube'
 import { getCubeIndexes } from './CubeMath'
@@ -10,26 +10,37 @@ import styles from './SudokuGame.module.scss';
 const ApiName = 'sudokuDaily'
 const path = '/sudoku/daily'
 
+const CUBE_COLOURS = ['red', 'blue', 'rgb(0,100,100)', 'rgb(170, 255, 0)', 'fuchsia']
+
 const SudokuGame: FC = () => {
   const gameSize = useAppSelector((state) => state.sudoku.currentGame.gameSize)
   const cubesDetailsLoaded = useAppSelector((state) => state.sudoku.currentGame.gameDetails.length > 0)
   const dispatch = useAppDispatch()
-  const [colors, setColors] = useState<(Color|null)[]>()
+  const [colors, setColors] = useState<Color[]>([])
   const [loading, setLoading] = useState(false)
+  const [cubeIndices, setCubeIndices] = useState<number[][] | null>()
 
-  if (gameSize > 0 && colors?.length !== gameSize + 1) {
-    assignColors()
-  }
-  if (loading && cubesDetailsLoaded) {
-    setLoading(false)
-  }
+ const scrollRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      scrollRef.current.x -= e.deltaX * 0.005;
+      scrollRef.current.y -= e.deltaY * 0.005;
+    };
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  useEffect(() => {
+    if (gameSize && colors?.length !== gameSize) {
+      const choices = CUBE_COLOURS.slice(0, gameSize)
+      setColors([...choices.map(x => new Color(x))])
+    }
+    setCubeIndices(getCubeIndexes(gameSize))
+  }, [gameSize])
+
   if (!loading && !cubesDetailsLoaded) {
     loadGame()
-  }
-
-  function assignColors() {
-    const choices = ['red', 'blue', 'rgb(0,100,100)', 'rgb(170, 255, 0)','fuchsia'].splice(0, gameSize)
-    setColors([...choices.map(x => new Color(x)), null])
   }
 
   function loadGame() {
@@ -39,34 +50,23 @@ const SudokuGame: FC = () => {
         return {colorIndex: x, index: i, given: x < (gameSize)}
       })
       dispatch(set_game(newGameDetails))
+      setLoading(false)
     })
-  }
-
-  function makeCubes(): ReactElement[] {
-    const cubeIndexes = getCubeIndexes((gameSize))
-    const cubes: JSX.Element[] = []
-    for (let i = 0; i < cubeIndexes.length; i++) {
-      cubes.push(
-        <div key={gameSize + '' + i}>
-          <CubeCube
-            colors={colors ?? []}
-            indexes={cubeIndexes[i]}
-            position={new Vector3(0, i*6,0)}
-            cubeCubeIndex={i}/>
-        </div>
-      );
-    }
-    return cubes
-  }
-
-  function shouldRenderGame(): boolean {
-    const colorsSet = colors?.length === gameSize + 1
-    return cubesDetailsLoaded && colorsSet
   }
 
   return (
     <div className={styles.SudokuGame}>
-      {shouldRenderGame() && makeCubes()}
+      {cubeIndices?.map((indices: number[], i: number, _: number[][]) =>
+        <div key={gameSize + '_' + i}>
+          <CubeCube
+            colors={colors ?? []}
+            indexes={indices}
+            position={new Vector3(0, i*6,0)}
+            cubeCubeIndex={i}
+            scrollRef={scrollRef}
+          />
+        </div>
+      )}
     </div>
   );
 };

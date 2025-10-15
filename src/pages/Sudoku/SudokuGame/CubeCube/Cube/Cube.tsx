@@ -1,25 +1,25 @@
+
 import { FC, useState } from 'react'
-import { Color, Vector3 } from 'three'
-import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks'
-import { click_cube } from '../../../Redux/actions'
+import { Color, Vector3, DoubleSide } from 'three'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { click_cube } from 'src/pages/Sudoku/Redux/actions'
 import { shallowEqual } from 'react-redux'
-import { CubeDetails } from '../../../models'
-import * as THREE from 'three'
+import { CubeDetails } from 'src/pages/Sudoku/models'
+import { ThreeEvent } from '@react-three/fiber'
 
 interface CubeProps {
-  colors: (Color|null)[]
+  colors: Color[]
   position: Vector3
   index: number
 }
 
 const Cube: FC<CubeProps> = ({colors, index, position}) => {
-  console.log('Rerender Cube')
   const cubeDetails: CubeDetails = useAppSelector((state) => state.sudoku.currentGame.gameDetails[index], shallowEqual)
   const solved = useAppSelector((state) => state.sudoku.currentGame.solved)
   const dispatch = useAppDispatch()
-  const newOpacity = cubeDetails.colorIndex + 1 === colors.length ? 0 : (cubeDetails.given ? 1 : .8)
+  const newOpacity = cubeDetails.colorIndex == null ? 0 : (cubeDetails.given ? 1 : .7)
   const [opacity, setOpacity] = useState(newOpacity)
-  
+
   if (opacity !== newOpacity) {
     setOpacity(newOpacity)
   }
@@ -31,16 +31,16 @@ const Cube: FC<CubeProps> = ({colors, index, position}) => {
   }
 
   return (
-  <mesh position={position} onClick={e => {e.stopPropagation(); handleClick()}}>
-    <boxGeometry args={[.95,.95,.95]}/>
-    <meshBasicMaterial 
-      side={THREE.DoubleSide}
-      transparent={newOpacity != 1}
-      opacity={opacity} 
-      color={colors[cubeDetails.colorIndex] ?? undefined}
-      depthWrite={true}
-      />
-  </mesh>
+    <mesh position={position} onClick={(e:ThreeEvent<MouseEvent>) => {e.stopPropagation(); handleClick()}}>
+      <boxGeometry args={[.95,.95,.95]}/>
+      <meshBasicMaterial 
+        side={DoubleSide}
+        transparent={newOpacity !== 1}
+        opacity={opacity} 
+        color={cubeDetails.colorIndex !== null ? colors[cubeDetails.colorIndex] : undefined}
+        depthWrite={true}
+        />
+    </mesh>
   )
 };
 

@@ -45,7 +45,7 @@ const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action:
 }
 
 function resetGame(state: SudokuGameState): SudokuGameState {
-  state.gameDetails.forEach(x => {if (!x.given) x.colorIndex = state.gameSize})
+  state.gameDetails.forEach(x => {if (!x.given) x.colorIndex = null})
   state.solved = false
   return state
 }
@@ -66,11 +66,12 @@ function setGameSize(state: SudokuDayState, gameSize: number) {
 
 function setGame(gameDetails: CubeDetails[]): SudokuGameState {
   const nullCubes = gameDetails?.filter(cube => cube.colorIndex === Math.cbrt(gameDetails.length)).length ?? 0
+  const gameSize = Math.cbrt(gameDetails?.length)
   const gameState = {
-    gameDetails: gameDetails?.map(x => {return {index: x.index, given: x.given, colorIndex: x.colorIndex}}) ?? [],
+    gameDetails: gameDetails?.map(x => {return {index: x.index, given: x.given, colorIndex: x.colorIndex === gameSize ? null : x.colorIndex}}) ?? [],
     solved: false,
     nullCubes: nullCubes,
-    gameSize: Math.cbrt(gameDetails?.length)
+    gameSize: gameSize
   }
   if (nullCubes === 0) {
     checkForWin(gameState)
@@ -80,12 +81,13 @@ function setGame(gameDetails: CubeDetails[]): SudokuGameState {
 
 function clickCube(gameState: SudokuGameState, index: number): SudokuGameState {
   if (!gameState.solved && !gameState.gameDetails[index].given) {
-    if (gameState.gameDetails[index].colorIndex === gameState.gameSize) {
+    const cube = gameState.gameDetails[index]
+    if (cube?.colorIndex === null) {
       gameState.nullCubes--
+      cube.colorIndex = 0
     }
-
-    gameState.gameDetails[index].colorIndex = ++gameState.gameDetails[index].colorIndex % (gameState.gameSize + 1)
-    if (gameState.gameDetails[index].colorIndex === gameState.gameSize) {
+    else if (cube.colorIndex !== null && ++cube.colorIndex >= gameState.gameSize) {
+      cube.colorIndex = null
       gameState.nullCubes++
     }
     checkForWin(gameState)
@@ -96,8 +98,9 @@ function clickCube(gameState: SudokuGameState, index: number): SudokuGameState {
 function checkForWin(state: SudokuGameState) {
   if (state.nullCubes > 0) {
     state.solved = false
+    return
   }
-  state.solved = checkForSolve(state.gameDetails.map(x => x.colorIndex))
+  state.solved = checkForSolve(state.gameDetails.map(x => x.colorIndex as number))
 }
 
 export default sudokuReducer

@@ -13,6 +13,6 @@ export interface SudokuGameState {
 
 export interface CubeDetails {
   index: number
-  colorIndex: number
+  colorIndex: number|null
   given: boolean
 }
