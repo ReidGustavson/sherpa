@@ -27,9 +27,9 @@
   }
   div[class*='menu'] {
     display: flex;
-    height:100%;
     flex-direction: column;
     justify-content: space-between;
+    align-items: start;
   }
   div[class*='button-group'] {
     display: flex;
@@ -38,11 +38,13 @@
     * {
       border-radius: 20px;
       width: 100px;
+      height: 30px;
       margin: 1px;
     }
     label[class*='button-label'] {
       color:purple;
       font-weight: 900;
+      margin-bottom: 20px;
     }
     button[class*='current'] {
       background-color: gold;

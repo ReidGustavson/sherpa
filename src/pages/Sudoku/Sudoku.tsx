@@ -29,6 +29,9 @@ const Sudoku: FC = () => {
           <div className='button-group'>
             <label className='button-labels'>Cube Dimensions</label>
             {[3,4,5].map(i => <button className={gameSize === i ? "current" : ""} key={i} onClick={() => dispatch(set_game_size(i)) }>{i}</button>)}
+          </div>
+
+          <div className='button-group'>
             <button key='reset' onClick={() => dispatch(reset_game())}>Reset</button>
           </div>
 
