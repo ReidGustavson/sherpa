@@ -21,8 +21,8 @@ const CubeCube: FC<CubeCubeProps> = ({ scrollRef, colors, indexes }) => {
 
   useFrame(() => {
     if (!parentRef.current) return;
-    parentRef.current.rotation.x += (scrollRef.current.y - parentRef.current.rotation.x) * 0.5;
-    parentRef.current.rotation.y += (scrollRef.current.x - parentRef.current.rotation.y) * 0.5;
+    parentRef.current.rotation.x += (scrollRef.current?.y ?? 0 - parentRef.current.rotation.x) * 0.5;
+    parentRef.current.rotation.y += (scrollRef.current?.x ?? 0 - parentRef.current.rotation.y) * 0.5;
   });
   
   function getPosition(index: number){
