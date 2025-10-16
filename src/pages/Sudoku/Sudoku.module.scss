@@ -25,7 +25,7 @@
     justify-content: center;
     align-items: center;
   }
-  div[class*='buttons'] {
+  div[class*='menu'] {
     display: flex;
     height:100%;
     flex-direction: column;
@@ -49,6 +49,7 @@
     }
   }
   div[class*='game-border'] {
+    position: relative; 
     border-radius: 10px;
     border-color: purple;
     border-width: 10px;

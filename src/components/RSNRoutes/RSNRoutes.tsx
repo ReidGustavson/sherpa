@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Routes, Route } from "react-router-dom";
-import HowItsMade from '../../pages/Section/Footer/HowItsMade';
-import GameExplainer from '../../pages/Sudoku/GameExplainer/GameExplainer';
+import HowItsMade from '../../pages/Sudoku/HowItsMade';
+import GameExplainer from '../../pages/Sudoku/GameExplainer';
 
 const BodyRoutes: FC = () => (
   <Routes>
