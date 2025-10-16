@@ -1,18 +1,62 @@
 .Sudoku {
-  height: 100%;
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
+  justify-content: center;
+  align-items: center;
+  div[class*='title'] {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(1rem, 10vw, 1000px);
+    width: 100%;
+    text-wrap: nowrap;
+    text[class*='S'] {color: rgb(0,100,100)}
+    text[class*='U'] {color: fuchsia}
+    text[class*='D'] {color: blue}
+    text[class*='O'] {color:red}
+    text[class*='K'] {color: rgb(170, 255, 0)}
+    text[class*='U2'] {color: purple}
+    text[class*='3'] {color: blue}
+    text[class*='D2'] {color:red}
+  }
+  div[class*='game'] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  div[class*='buttons'] {
+    display: flex;
+    height:100%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
   div[class*='button-group'] {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    * {
+      border-radius: 20px;
+      width: 100px;
+      margin: 1px;
+    }
+    label[class*='button-label'] {
+      color:purple;
+      font-weight: 900;
+    }
+    button[class*='current'] {
+      background-color: gold;
+    }
+  }
+  div[class*='game-border'] {
+    border-radius: 10px;
+    border-color: purple;
+    border-width: 10px;
+    border-style: ridge;
     display: flex;
     flex-direction: row;
     justify-content: stretch;
-    width: 100%;
-    * {
-      width: 100%;
-      margin: 1px;
-    }
+    contain: layout paint
   }
   background-color: black;
 }

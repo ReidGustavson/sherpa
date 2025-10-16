@@ -51,6 +51,7 @@ function resetGame(state: SudokuGameState): SudokuGameState {
 }
 
 function setGameSize(state: SudokuDayState, gameSize: number) {
+  if (state.currentGame.gameSize === gameSize) return state;
   let newCurrentGame = state.games.find((game: SudokuGameState) => game.gameSize === gameSize)
   newCurrentGame = newCurrentGame ?? {gameDetails: [], nullCubes: 0, solved: false, gameSize: gameSize}
   const newGamesList = state.games.filter((game: SudokuGameState) => game.gameSize !== gameSize)

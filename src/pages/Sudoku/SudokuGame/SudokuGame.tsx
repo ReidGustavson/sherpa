@@ -13,8 +13,9 @@ const path = '/sudoku/daily'
 const CUBE_COLOURS = ['red', 'blue', 'rgb(0,100,100)', 'rgb(170, 255, 0)', 'fuchsia']
 
 const SudokuGame: FC = () => {
+  const containerRef = useRef<HTMLDivElement|null>(null)
   const gameSize = useAppSelector((state) => state.sudoku.currentGame.gameSize)
-  const cubesDetailsLoaded = useAppSelector((state) => state.sudoku.currentGame.gameDetails.length > 0)
+  const cubesDetailsLoaded = useAppSelector((state) => state.sudoku.currentGame.gameDetails.length === Math.pow(state.sudoku.currentGame.gameSize,3))
   const dispatch = useAppDispatch()
   const [colors, setColors] = useState<Color[]>([])
   const [loading, setLoading] = useState(false)
@@ -23,25 +24,57 @@ const SudokuGame: FC = () => {
  const scrollRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    let isDragging = false
+    let lastX = 0
+    let lastY = 0
+    
     const handleWheel = (e: WheelEvent) => {
+      e.preventDefault()
       scrollRef.current.x -= e.deltaX * 0.005;
       scrollRef.current.y -= e.deltaY * 0.005;
     };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
+    
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      isDragging = true
+      const point = 'touches' in e ? e.touches[0] : e
+      lastX = point.clientX
+      lastY = point.clientY
+    }
+
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDragging) return
+      const point = 'touches' in e ? e.touches[0] : e
+      const dx = point.clientX - lastX
+      const dy = point.clientY - lastY
+      lastX = point.clientX
+      lastY = point.clientY
+      scrollRef.current.x += dx * 0.005
+      scrollRef.current.y += dy * 0.005
+    }
+
+    const handlePointerUp = () => {
+      isDragging = false
+    }
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    el.addEventListener('pointerdown', handlePointerDown)
+    el.addEventListener('pointermove', handlePointerMove)
+    el.addEventListener('pointerup', handlePointerUp)
+    return () => {
+      el.removeEventListener("wheel", handleWheel)
+      el.removeEventListener('pointerdown', handlePointerDown)
+      el.removeEventListener('pointermove', handlePointerMove)
+      el.removeEventListener('pointerup', handlePointerUp)
+    }
   }, []);
 
   useEffect(() => {
     if (gameSize && colors?.length !== gameSize) {
-      const choices = CUBE_COLOURS.slice(0, gameSize)
-      setColors([...choices.map(x => new Color(x))])
+      loadGame()
     }
-    setCubeIndices(getCubeIndexes(gameSize))
   }, [gameSize])
-
-  if (!loading && !cubesDetailsLoaded) {
-    loadGame()
-  }
 
   function loadGame() {
     setLoading(true)
@@ -50,13 +83,16 @@ const SudokuGame: FC = () => {
         return {colorIndex: x, index: i, given: x < (gameSize)}
       })
       dispatch(set_game(newGameDetails))
+      const choices = CUBE_COLOURS.slice(0, gameSize)
+      setColors([...choices.map(x => new Color(x))])
+      setCubeIndices(getCubeIndexes(gameSize))
       setLoading(false)
     })
   }
 
   return (
-    <div className={styles.SudokuGame}>
-      {cubeIndices?.map((indices: number[], i: number, _: number[][]) =>
+    <div className={styles.SudokuGame} ref={containerRef}>
+      {!loading && cubesDetailsLoaded && cubeIndices?.map((indices: number[], i: number, _: number[][]) =>
         <div key={gameSize + '_' + i}>
           <CubeCube
             colors={colors ?? []}
