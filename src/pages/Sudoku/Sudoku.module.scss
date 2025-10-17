@@ -1,17 +1,15 @@
 .Sudoku {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 100%;
-  margin-bottom: 50px;
   div[class*='title'] {
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
     font-weight: 900;
     font-size: clamp(1rem, 10vw, 1000px);
     height: 100%;
-    width: 100%;
     text-wrap: nowrap;
     text[class*='S'] {color: rgb(0,100,100)}
     text[class*='U'] {color: fuchsia}
@@ -34,7 +32,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: start;
   }
   div[class*='button-group'] {
@@ -67,7 +65,6 @@
     justify-content: stretch;
     contain: layout paint;
     flex: 1;
-    height: 100%;
   }
   background-color: black;
 }
