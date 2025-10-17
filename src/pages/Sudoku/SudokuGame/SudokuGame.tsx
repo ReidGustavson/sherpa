@@ -96,7 +96,7 @@ const SudokuGame: FC = () => {
   return (
     <div className={styles.SudokuGame} ref={containerRef}>
       {!loading && cubesDetailsLoaded && cubeIndices?.map((indices: number[], i: number, _: number[][]) =>
-        <div key={gameSize + '_' + i}>
+        <span key={gameSize + '_' + i}>
           <CubeCube
             colors={colors ?? []}
             indexes={indices}
@@ -104,7 +104,7 @@ const SudokuGame: FC = () => {
             cubeCubeIndex={i}
             scrollRef={scrollRef}
           />
-        </div>
+        </span>
       )}
     </div>
   );

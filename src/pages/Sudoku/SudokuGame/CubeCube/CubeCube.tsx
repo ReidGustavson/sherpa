@@ -68,9 +68,8 @@ const WrappedCubeCube: FC<CubeCubeProps> = (props) => {
   return (
     <Canvas 
       camera={cubeCamera}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', display: 'block' }}
       resize={{ scroll: false, debounce: { scroll: 50, resize: 50 } }}
-      gl={{ preserveDrawingBuffer: true }}
     >
       <CubeCube {...props} />
     </Canvas>
