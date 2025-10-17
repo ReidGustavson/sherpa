@@ -66,7 +66,12 @@ const WrappedCubeCube: FC<CubeCubeProps> = (props) => {
   cubeCamera.position.set(0,0, cubeSize * 2 + 1)
   cubeCamera.lookAt(new Vector3(0,0,0))
   return (
-    <Canvas camera={cubeCamera}>
+    <Canvas 
+      camera={cubeCamera}
+      style={{ width: '100%', height: '100%' }}
+      resize={{ scroll: false, debounce: { scroll: 50, resize: 50 } }}
+      gl={{ preserveDrawingBuffer: true }}
+    >
       <CubeCube {...props} />
     </Canvas>
   )
