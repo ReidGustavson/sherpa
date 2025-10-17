@@ -27,13 +27,6 @@
     align-items: center;
     flex: 1 1 auto;
   }
-  div[class*='menu'] {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: start;
-  }
   div[class*='button-group'] {
     display: flex;
     flex-direction: column;
@@ -53,8 +46,17 @@
       background-color: gold;
     }
   }
+  div[class*='menu'] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    flex: 1;
+    div {
+      margin-top: 50px;
+    }
+  }
   div[class*='game-border'] {
-    position: relative; 
     border-radius: 10px;
     border-color: purple;
     border-width: 10px;
