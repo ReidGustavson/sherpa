@@ -62,9 +62,9 @@ const SudokuGame: FC = () => {
     }
 
     el.addEventListener("wheel", handleWheel, { passive: false });
-    el.addEventListener('pointerdown', handlePointerDown)
-    el.addEventListener('pointermove', handlePointerMove)
-    el.addEventListener('pointerup', handlePointerUp)
+    el.addEventListener('pointerdown', handlePointerDown, { passive: false })
+    el.addEventListener('pointermove', handlePointerMove, { passive: false })
+    el.addEventListener('pointerup', handlePointerUp, { passive: false })
     return () => {
       el.removeEventListener("wheel", handleWheel)
       el.removeEventListener('pointerdown', handlePointerDown)
