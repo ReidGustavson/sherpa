@@ -37,6 +37,7 @@ const SudokuGame: FC = () => {
     };
     
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault()
       isDragging = true
       const point = 'touches' in e ? e.touches[0] : e
       lastX = point.clientX
@@ -44,6 +45,7 @@ const SudokuGame: FC = () => {
     }
 
     const handlePointerMove = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault()
       if (!isDragging) return
       const point = 'touches' in e ? e.touches[0] : e
       const dx = point.clientX - lastX
@@ -54,7 +56,8 @@ const SudokuGame: FC = () => {
       scrollRef.current.y += dy * 0.005
     }
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault()
       isDragging = false
     }
 
