@@ -10,8 +10,8 @@ const HowItsMade = () =>(
       <li>{"Graphics: Threejs"}</li>
     </ul>
 
-    <a href='https://www.github.com/ReidGustavson/sherpa/tree/sudoku'>Source Code</a>
-    <a href='https://www.linkedin.com/in/reid-g'>Creator LinkedIn</a>
+    <a href='https://www.github.com/ReidGustavson/sherpa/tree/sudoku' target="_blank" rel="noopener noreferrer">Source Code</a>
+    <a href='https://www.linkedin.com/in/reid-g' target="_blank" rel="noopener noreferrer">Creator LinkedIn</a>
   </div>
 );
 
