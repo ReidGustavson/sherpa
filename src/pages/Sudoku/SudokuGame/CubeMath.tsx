@@ -26,9 +26,9 @@ export function checkForSolve(state: number[]): boolean {
       const column = new Set()
       const depth = new Set()
       for (let k=0; k < gameSize; k++) {
-        row.add(state[i*gameSize*gameSize + j*gameSize + k])
-        column.add(state[i*gameSize*gameSize + j + k*gameSize])
-        depth.add(state[i*gameSize + j + k*gameSize*gameSize])
+        row.add(state[i * gameSize * gameSize + j * gameSize + k]);
+        column.add(state[i * gameSize * gameSize + k * gameSize + j]);
+        depth.add(state[k * gameSize * gameSize + j * gameSize + i]);
       }
       for (const dimension of [row, column, depth]) {
         if (dimension.has(gameSize) || dimension.size < gameSize) {
