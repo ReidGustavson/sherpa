@@ -31,7 +31,7 @@ export function checkForSolve(state: number[]): boolean {
         depth.add(state[k * gameSize * gameSize + j * gameSize + i]);
       }
       for (const dimension of [row, column, depth]) {
-        if (dimension.has(gameSize) || dimension.size < gameSize) {
+        if (dimension.size < gameSize) {
           return false
         }
       }
