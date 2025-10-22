@@ -1,16 +1,30 @@
-const GameExplainer = () =>(
-  <>
-  <h2>{"How to Play"}</h2>
-  <ul>
-    <li>{"Goal: Put exactly one cube of each color on every row, column, and depth."}</li>
-    <li>{"How To Change Colors: Click on the missing spaces to rotate through the colors."}</li>
-    <li>{"How to rotate the cube: Click and drag."}</li>
-    <li>{"How to fill the center: The lower cubes are duplicates of the nested cubes."}</li>
-    <li>{"When: There are new puzzles daily."}</li>
-    <li>{"Game Size: The buttons 3/4/5 refer to the number of colors in each level."}</li>
-    <li>{"Note: The cubes you assign are more transparent than the given ones."}</li>
-  </ul>
-  </>
+const GameExplainer = () => (
+  <div
+    style={{
+      position: 'relative',
+      boxSizing: 'content-box',
+      maxHeight: '80vh',
+      width: '90%',
+      aspectRatio: '1.2357723577235773',
+      padding: '0',
+      contain: "paint layout",
+    }}
+  >
+    <iframe
+      src="https://app.supademo.com/embed/cmgzdzlh30tf96nxtlut6ycpy?embed_v=2&utm_source=embed"
+      loading="lazy"
+      title="Sudoku Demo"
+      allow="clipboard-write"
+      allowFullScreen={false}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}
+    />
+  </div>
 );
 
 export default GameExplainer;
