@@ -1,0 +1,15 @@
+.Title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(1rem, 10vw, 1000px);
+    text-wrap: nowrap;
+    span[class*='S'] {color: rgb(0,100,100)}
+    span[class*='U'] {color: fuchsia}
+    span[class*='D'] {color: blue}
+    span[class*='O'] {color:red}
+    span[class*='K'] {color: rgb(170, 255, 0)}
+    span[class*='U2'] {color: purple}
+    span[class*='3'] {color: blue}
+    span[class*='D2'] {color:red}
+}

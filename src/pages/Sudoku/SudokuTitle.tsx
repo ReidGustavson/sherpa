@@ -1,15 +1,17 @@
+import styles from './SudokuTitle.module.scss';
+
 const SudokuTitle =() => {
     return (
-        <div className="title">
-          <text className="S">S</text>
-          <text className="U">U</text>
-          <text className="D">D</text>
-          <text className="O">O</text>
-          <text className="K">K</text>
-          <text className="U2">U</text>
-          <text>{" "}</text>
-          <text className="3">3</text>
-          <text className="D2">D</text>
+        <div className={styles.Title}>
+          <span className="S">S</span>
+          <span className="U">U</span>
+          <span className="D">D</span>
+          <span className="O">O</span>
+          <span className="K">K</span>
+          <span className="U2">U</span>
+          <span>{" "}</span>
+          <span className="Num3">3</span>
+          <span className="D2">D</span>
         </div>
     )
 }
