@@ -45,7 +45,14 @@ const sudokuReducer : Reducer = (state: SudokuDayState = initialState(), action:
 }
 
 function resetGame(state: SudokuGameState): SudokuGameState {
-  state.gameDetails.forEach(x => {if (!x.given) x.colorIndex = null})
+  let nullCubes = 0;
+  state.gameDetails.forEach(x => {
+    if (!x.given) {
+      x.colorIndex = null
+      nullCubes++
+    }
+  })
+  state.nullCubes = nullCubes
   state.solved = false
   return state
 }
@@ -62,8 +69,6 @@ function setGameSize(state: SudokuDayState, gameSize: number) {
   state.games = newGamesList
   return state
 }
-
-
 
 function setGame(gameDetails: CubeDetails[]): SudokuGameState {
   const nullCubes = gameDetails?.filter(cube => cube.colorIndex === Math.cbrt(gameDetails.length)).length ?? 0
